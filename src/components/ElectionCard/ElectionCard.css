@@ -38,10 +38,12 @@
 
 .election-card--archive {
   opacity: 0.6;
+  transition: opacity 0.5s ease, box-shadow 0.5s ease;
 }
 
 .election-card--archive:hover {
   opacity: 0.85;
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .election-card__content {
@@ -120,6 +122,7 @@
 .election-card__button:hover {
   background: var(--accent);
   color: var(--bg);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .election-card__silhouettes {

@@ -14,12 +14,13 @@
   color: var(--muted);
   text-transform: lowercase;
   align-self: flex-start;
-  transition: color 0.15s;
+  transition: color 0.15s, box-shadow 0.15s;
   cursor: pointer;
 }
 
 .cd__back:hover {
   color: var(--accent);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 /* Election context breadcrumb */
@@ -129,6 +130,7 @@
 .cd__contact-link:hover {
   border-color: var(--accent);
   background: rgba(205, 220, 220, 0.08);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .cd__contact-empty {
@@ -160,6 +162,7 @@
 .cd__back-btn:hover {
   color: var(--accent);
   border-color: var(--accent);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .cd__vote-btn {
@@ -177,6 +180,7 @@
 .cd__vote-btn:hover {
   background: var(--accent);
   color: var(--bg);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 /* Sections */

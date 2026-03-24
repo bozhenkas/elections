@@ -60,6 +60,7 @@
 .archive__nav-btn:hover {
   color: var(--accent);
   border-color: rgba(205, 220, 220, 0.4);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .archive__nav-btn--active {
@@ -275,6 +276,7 @@
 .arc-card__collapse-btn:hover {
   color: var(--accent);
   border-color: rgba(205, 220, 220, 0.45);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .arc-card__council {

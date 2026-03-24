@@ -15,11 +15,12 @@
   color: var(--muted);
   text-transform: lowercase;
   align-self: flex-start;
-  transition: color 0.15s;
+  transition: color 0.15s, box-shadow 0.15s;
 }
 
 .el-page__back:hover {
   color: var(--accent);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 /* Header */
@@ -163,6 +164,7 @@
 .el-page__candidate-btn--program:hover {
   background: var(--accent);
   color: var(--bg);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .el-page__candidate-btn--detail {
@@ -172,6 +174,7 @@
 
 .el-page__candidate-btn--detail:hover {
   border-color: var(--accent);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 /* Expanded program */
@@ -214,12 +217,13 @@
   border-radius: var(--radius-pill);
   padding: 14px 40px 16px;
   text-transform: lowercase;
-  transition: opacity 0.2s;
+  transition: opacity 0.2s, box-shadow 0.2s;
   cursor: pointer;
 }
 
 .el-page__ballot-btn:hover {
   opacity: 0.85;
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .el-page__ballot-hint {
@@ -299,12 +303,13 @@
   text-transform: lowercase;
   margin-top: 8px;
   cursor: pointer;
-  transition: border-color 0.2s, color 0.2s;
+  transition: border-color 0.2s, color 0.2s, box-shadow 0.2s;
 }
 
 .wf-block__btn:hover {
   border-color: rgba(205, 220, 220, 0.6);
   color: rgba(205, 220, 220, 0.8);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .wf-block__arrow {

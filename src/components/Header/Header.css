@@ -53,13 +53,14 @@
   text-transform: lowercase;
   padding: 3px 12px 4px;
   border-radius: 8px;
-  transition: background 0.15s, color 0.15s;
+  transition: background 0.15s, color 0.15s, box-shadow 0.15s;
   cursor: pointer;
   line-height: normal;
 }
 
 .header__lang-btn:hover {
   background: rgba(231, 231, 231, 0.12);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 /* Login button */
@@ -73,12 +74,13 @@
   text-transform: lowercase;
   box-shadow: 1px 2px 22px 0px rgba(17, 32, 32, 0.1);
   cursor: pointer;
-  transition: opacity 0.15s;
+  transition: opacity 0.15s, box-shadow 0.15s;
   line-height: normal;
 }
 
 .header__login-btn:hover {
   opacity: 0.85;
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 @media (max-width: 768px) {

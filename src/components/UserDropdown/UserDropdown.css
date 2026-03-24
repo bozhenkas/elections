@@ -9,11 +9,12 @@
   padding: 3px 12px 4px 4px;
   border-radius: 8px;
   cursor: pointer;
-  transition: background 0.15s;
+  transition: background 0.15s, box-shadow 0.15s;
 }
 
 .user-dropdown__trigger:hover {
   background: rgba(231, 231, 231, 0.08);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .user-dropdown__icon {
@@ -79,10 +80,11 @@
   color: rgba(249, 249, 249, 0.6);
   text-align: left;
   text-transform: lowercase;
-  transition: color 0.15s;
+  transition: color 0.15s, box-shadow 0.15s;
   cursor: pointer;
 }
 
 .user-dropdown__item:hover {
   color: var(--pink);
+  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
