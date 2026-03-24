@@ -1,0 +1,586 @@
+/* ===== Archive Section ===== */
+.archive {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 60px var(--padding-x) 80px;
+}
+
+/* Title */
+.archive__title {
+  margin-bottom: 40px;
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  margin: 0;
+}
+
+/* Stack container */
+.archive__stack-wrap {
+  width: 100%;
+  /* Extra width to accommodate back cards peeking right */
+  max-width: calc(1442px + 50px);
+}
+
+.archive__stack {
+  position: relative;
+  width: 100%;
+  height: 610px;
+  perspective: 1800px;
+  perspective-origin: 50% 50%;
+}
+
+/* Year navigation for large archives */
+.archive__nav {
+  display: flex;
+  gap: 8px;
+  margin-top: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.archive__nav-btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: rgba(205, 220, 220, 0.5);
+  border: 0.5px solid rgba(205, 220, 220, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 4px 12px 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: lowercase;
+}
+
+.archive__nav-btn:hover {
+  color: var(--accent);
+  border-color: rgba(205, 220, 220, 0.4);
+}
+
+.archive__nav-btn--active {
+  color: #243434;
+  background: var(--pink);
+  border-color: var(--pink);
+}
+
+/* Counter */
+.archive__counter {
+  margin-top: 12px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(205, 220, 220, 0.35);
+  letter-spacing: 0.02em;
+}
+
+/* Hint */
+.archive__hint {
+  margin-top: 16px;
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 14px;
+  color: rgba(205, 220, 220, 0.4);
+  letter-spacing: 0.01em;
+}
+
+/* ===== Card base — per Figma ===== */
+.arc-card {
+  position: absolute;
+  top: 28px;
+  left: 0;
+  right: 0;
+  max-width: 1442px;
+  border-radius: 12px;
+  border: 0.5px solid #636363;
+  background: rgba(88, 139, 139, 0.17);
+  backdrop-filter: blur(81.15px);
+  -webkit-backdrop-filter: blur(81.15px);
+  overflow: hidden;
+  /* Page-turn hinge on left edge */
+  transform-origin: left center;
+  will-change: transform, opacity;
+  transform-style: preserve-3d;
+}
+
+.arc-card--front {
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+.arc-card--back {
+  pointer-events: none;
+}
+
+/* Invisible click area for front card (below CTA z-index) */
+.arc-card__click-area {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  cursor: pointer;
+}
+
+/* ===== Card inner layout — per Figma ===== */
+/* Both states: flex column, 1442px, padding 32px 40px */
+.arc-card__inner {
+  display: flex;
+  width: 100%;
+  padding: 32px 40px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+/* ===== Header row ===== */
+.arc-card__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  width: 100%;
+}
+
+.arc-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  line-height: 1;
+}
+
+.arc-card__decor {
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 22px;
+  color: rgba(238, 238, 238, 0.8);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.arc-card__title {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: -0.03em;
+  line-height: 0.92;
+  margin: 0;
+  white-space: pre-line;
+}
+
+/* ===== Badges — uses shared Badge component ===== */
+.arc-card__badges {
+  display: flex;
+  gap: 0;
+  align-items: center;
+  flex-shrink: 0;
+  flex-wrap: nowrap;
+}
+
+/* ===== Percent block ===== */
+.arc-pct {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.arc-pct__num {
+  display: flex;
+  align-items: baseline;
+  gap: 1px;
+  color: rgba(205, 220, 220, 0.4);
+  line-height: 1;
+}
+
+.arc-pct--winner .arc-pct__num {
+  color: var(--accent);
+}
+
+.arc-pct__value {
+  font-family: var(--font-display);
+  font-size: 60px;
+  font-weight: 400;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.arc-pct__sign {
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 30px;
+  line-height: 1;
+  align-self: flex-start;
+  margin-top: 5px;
+}
+
+.arc-pct__name {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(249, 249, 249, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
+}
+
+/* Compact (councils) */
+.arc-pct--compact .arc-pct__value { font-size: 40px; }
+.arc-pct--compact .arc-pct__sign  { font-size: 20px; }
+.arc-pct--compact .arc-pct__name  { font-size: 11px; max-width: 110px; }
+
+/* ===== Simple results row ===== */
+.arc-card__results {
+  display: flex;
+  gap: 48px;
+  align-items: flex-end;
+  flex-wrap: nowrap;
+}
+
+/* ===== Councils expand wrapper ===== */
+.arc-card__councils-wrap {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===== Councils layout — stacked vertically ===== */
+.arc-card__councils {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Collapse button */
+.arc-card__collapse-btn {
+  align-self: flex-start;
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 15px;
+  color: rgba(205, 220, 220, 0.5);
+  border: 0.5px solid rgba(205, 220, 220, 0.2);
+  border-radius: var(--radius-sm);
+  padding: 6px 18px 8px;
+  cursor: pointer;
+  transition: all 0.25s;
+  position: relative;
+  z-index: 3;
+  pointer-events: auto;
+}
+
+.arc-card__collapse-btn:hover {
+  color: var(--accent);
+  border-color: rgba(205, 220, 220, 0.45);
+}
+
+.arc-card__council {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.arc-card__council-label {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  line-height: 1;
+}
+
+.arc-card__council-pre {
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 17px;
+  color: rgba(238, 238, 238, 0.65);
+}
+
+.arc-card__council-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: -0.025em;
+}
+
+.arc-card__council-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+}
+
+/* ===== Turnout — pixel-perfect per Figma ===== */
+.arc-turnout {
+  display: flex;
+  width: 100%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.arc-turnout__main {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0;
+}
+
+.arc-turnout__numbers {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.arc-turnout__bracket-group {
+  display: flex;
+  align-items: center;
+  padding-right: 3px;
+}
+
+.arc-turnout__bracket {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 80px;
+  font-weight: 400;
+  line-height: 0;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+  margin-right: -3px;
+}
+
+.arc-turnout__fraction-text {
+  color: #F9F9F9;
+  font-family: var(--font-body);
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 100%;
+  letter-spacing: -0.72px;
+  text-align: center;
+  margin-right: -3px;
+}
+
+.arc-turnout__num-group {
+  font-size: 0;
+  line-height: 0;
+  white-space: nowrap;
+}
+
+.arc-turnout__num {
+  color: var(--accent);
+  font-family: var(--font-display);
+  font-size: 80px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -1px;
+  text-transform: uppercase;
+}
+
+.arc-turnout__pct-sign {
+  color: #EEE;
+  font-family: var(--font-decor);
+  font-size: 52px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -1.04px;
+}
+
+.arc-turnout__label {
+  color: #F9F9F9;
+  font-family: var(--font-body);
+  font-size: 25px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  text-align: right;
+  white-space: nowrap;
+}
+
+/* ===== НАЖМИТЕ — inline centered block (front councils card) ===== */
+.arc-card__cta-inline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  align-self: center;
+  padding: 20px 40px;
+  cursor: pointer;
+  pointer-events: auto;
+  position: relative;
+  z-index: 3;
+}
+
+/* ===== НАЖМИТЕ — full overlay (back cards) ===== */
+.arc-card__cta-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 20px;
+  background: rgba(12, 12, 12, 0.62);
+  border-radius: 12px;
+  pointer-events: auto;
+  cursor: pointer;
+  backdrop-filter: blur(2px);
+  z-index: 3;
+}
+
+.arc-card__cta-hint {
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 22px;
+  color: rgba(238, 238, 238, 0.65);
+  opacity: 0.85;
+}
+
+.arc-card__cta-label {
+  font-family: var(--font-display);
+  font-size: 52px;
+  font-weight: 400;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+
+/* ===== Responsive — Tablet (769–1024) ===== */
+@media (max-width: 1024px) {
+  .arc-card__title {
+    font-size: 32px;
+  }
+
+  .arc-pct__value {
+    font-size: 48px;
+  }
+
+  .arc-pct__sign {
+    font-size: 24px;
+  }
+
+  .arc-turnout__bracket {
+    font-size: 56px;
+  }
+
+  .arc-turnout__num {
+    font-size: 56px;
+  }
+
+  .arc-turnout__pct-sign {
+    font-size: 36px;
+  }
+
+  .arc-turnout__fraction-text {
+    font-size: 15px;
+    width: 38px;
+  }
+
+  .arc-turnout__label {
+    font-size: 20px;
+  }
+
+  .arc-card__cta-label {
+    font-size: 42px;
+  }
+}
+
+/* ===== Responsive — Mobile (≤768) ===== */
+@media (max-width: 768px) {
+  .archive {
+    padding: 40px 20px 60px;
+  }
+
+  .archive__title {
+    font-size: 32px;
+  }
+
+  .archive__stack {
+    height: 540px;
+  }
+
+  .arc-card__inner {
+    padding: 20px 20px;
+    gap: 24px;
+  }
+
+  .arc-card__head {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .arc-card__title {
+    font-size: 24px;
+  }
+
+  .arc-card__decor {
+    font-size: 18px;
+  }
+
+  .arc-pct__value {
+    font-size: 36px;
+  }
+
+  .arc-pct__sign {
+    font-size: 18px;
+    margin-top: 3px;
+  }
+
+  .arc-pct__name {
+    font-size: 11px;
+    max-width: 120px;
+  }
+
+  .arc-card__cta-label {
+    font-size: 32px;
+  }
+
+  .arc-card__cta-hint {
+    font-size: 17px;
+  }
+
+  .arc-turnout__bracket {
+    font-size: 40px;
+  }
+
+  .arc-turnout__num {
+    font-size: 40px;
+  }
+
+  .arc-turnout__pct-sign {
+    font-size: 26px;
+  }
+
+  .arc-turnout__fraction-text {
+    font-size: 13px;
+    width: 34px;
+  }
+
+  .arc-turnout__label {
+    font-size: 18px;
+  }
+
+  .arc-turnout__numbers {
+    gap: 6px;
+  }
+
+  .arc-card__results {
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .arc-card__badges {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    max-width: none;
+  }
+
+  .arc-pct--compact .arc-pct__value { font-size: 28px; }
+  .arc-pct--compact .arc-pct__sign  { font-size: 14px; }
+}

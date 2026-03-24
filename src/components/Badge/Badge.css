@@ -1,0 +1,45 @@
+/* Base badge — shared styles */
+.badge {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-body);
+  font-size: 21px;
+  font-style: italic;
+  font-weight: 400;
+  line-height: normal;
+  text-transform: lowercase;
+  white-space: nowrap;
+  /* Stroked padding by default */
+  padding: 1px 12px 3px 12px;
+}
+
+/* Filled pink chip */
+.badge--pink {
+  padding: 1px 10px 3px 10px;
+  background: var(--pink);
+  color: #243434;
+}
+
+/* Outline with accent border */
+.badge--outline {
+  background: transparent;
+  border: 0.5px solid var(--accent);
+  color: #f9f9f9;
+}
+
+/* Outline with pink border — center stroke via box-shadow */
+.badge--outline-pink {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--pink), 0 0 0 1px var(--pink);
+  color: #f9f9f9;
+}
+
+@media (max-width: 768px) {
+  .badge {
+    font-size: 14px;
+    padding: 4px 10px 6px;
+  }
+}

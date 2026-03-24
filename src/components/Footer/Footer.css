@@ -1,0 +1,32 @@
+.footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background: var(--footer-bg);
+  padding: 30px 20px;
+  margin-top: auto;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #eee;
+  opacity: 0.5;
+  letter-spacing: -0.02em;
+  line-height: 1.6;
+}
+
+.footer__copy,
+.footer__org,
+.footer__credits {
+  margin: 0;
+}
+
+.footer__credits a {
+  text-decoration: underline;
+  color: inherit;
+}
+
+.footer__credits a:hover {
+  opacity: 0.7;
+}

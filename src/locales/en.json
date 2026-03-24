@@ -1,0 +1,122 @@
+{
+  "header": {
+    "login": "log in",
+    "logout": "log out",
+    "student": "SPbGUT student",
+    "logo": "/assets/atoms/logo_elections_sut_en.svg"
+  },
+  "hero": {
+    "logo": "/assets/atoms/logo_elections_big_en.svg"
+  },
+  "election": {
+    "decor": "elections",
+    "chairman": "Chairman",
+    "subtitle": "of the Student Council",
+    "upcoming": "upcoming elections",
+    "active": "voting in progress",
+    "completed": "completed",
+    "goto": "go to elections",
+    "results": "results",
+    "daysLeft": "until voting",
+    "days": "days",
+    "date": "December 18"
+  },
+  "elpage": {
+    "back": "← back to home",
+    "candidates": "candidates",
+    "program": "program",
+    "collapse": "collapse",
+    "details": "details →",
+    "getBallot": "get ballot",
+    "loginAndVote": "log in and vote",
+    "authRequired": "authorization via SPbGUT personal account is required to vote",
+    "noChange": "your vote cannot be changed after confirmation",
+    "alreadyVoted": "you have already voted",
+    "voteRecorded": "your vote has been recorded and cannot be changed",
+    "notStarted": "voting has not started yet",
+    "canVoteAt": "you will be able to vote on",
+    "in": "at",
+    "resultsSection": "results",
+    "wireframeProgram": "wireframe · candidate program",
+    "wireframeVoted": "wireframe · vote recorded",
+    "wireframeWaiting": "wireframe · waiting",
+    "wireframeResults": "wireframe · voting results",
+    "resultsDesc": "voting results will be displayed here: vote percentage, winner, turnout. Uses ResultChart component.",
+    "wireframeConfirm": "wireframe · vote confirmation",
+    "wireframeVoteRecorded": "wireframe · vote recorded",
+    "voteCode": "vote code"
+  },
+  "candidate": {
+    "back": "← back to candidates",
+    "about": "about the candidate",
+    "program": "election program",
+    "toVoting": "to voting →",
+    "age": "years old",
+    "group": "group",
+    "contacts": "contacts",
+    "noContacts": "no contacts provided"
+  },
+  "ballot": {
+    "decor": "voting ballot",
+    "instruction": "select one candidate and confirm your choice",
+    "confirm": "confirm choice",
+    "disclaimer": "your vote cannot be changed after confirmation"
+  },
+  "vote": {
+    "sure": "are you sure?",
+    "willBeRecorded": "your vote will be recorded and cannot be changed",
+    "confirm": "confirm",
+    "change": "change",
+    "recorded": "your vote has been recorded",
+    "thanks": "thank you for participating!",
+    "close": "close"
+  },
+  "auth": {
+    "title": "to participate in elections\nlog in to your account",
+    "sub": "authorization via SPbGUT account — only university students can vote",
+    "btn": "log in via spbgut account",
+    "wireframe": "wireframe · authorization"
+  },
+  "faq": {
+    "title": "FAQ",
+    "subtitle": "(frequently asked questions)",
+    "fallback": "if you haven't found the answer, feel free to contact us via",
+    "or": "or",
+    "q1": "I encountered a problem, who should I contact?",
+    "a1": "if you encounter any issues, feel free to reach out via <a href=\"https://t.me/spbgut_sc\" target=\"_blank\" rel=\"noopener noreferrer\">telegram</a> or <a href=\"https://vk.com/spbgut_sc\" target=\"_blank\" rel=\"noopener noreferrer\">vkontakte</a>",
+    "q2": "is voting statistics available somewhere?",
+    "a2": "voting statistics will be available after the elections are completed on this page in the archived elections section.",
+    "q3": "how can I make sure my vote was counted?",
+    "a3": "after voting you will receive a confirmation on screen. every vote is recorded in the system and cannot be changed.",
+    "q4": "can I vote again?",
+    "a4": "no, each student can cast only one vote. the system automatically verifies vote uniqueness."
+  },
+  "archive": {
+    "title": "ARCHIVE",
+    "hint": "click on the card to go to the next one",
+    "turnout": "voter turnout",
+    "from": "of",
+    "next": "Next card",
+    "open": "to open",
+    "press": "‹ PRESS ›",
+    "council": "student council",
+    "collapse": "collapse",
+    "againstAll": "Against all",
+    "chairmanTitle": "CHAIRMAN\nOF THE STUDENT COUNCIL",
+    "chairsTitle": "CHAIRS\nOF STUDENT COUNCILS",
+    "date_dec18": "December 18",
+    "date_sep5": "September 5",
+    "date_may15": "May 15"
+  },
+  "timer": {
+    "label": "until voting ends"
+  },
+  "notFound": {
+    "title": "page not found",
+    "sub": "elections with this ID do not exist or have been removed",
+    "home": "go to home"
+  },
+  "footer": {
+    "org": "SPbGUT Student Council"
+  }
+}

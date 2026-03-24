@@ -1,0 +1,27 @@
+:root {
+  /* Palette */
+  --bg: #0F0F0F;
+  --surface: #243434;
+  --accent: #CDDCDC;
+  --pink: #FFCECE;
+  --white: #FFFFFF;
+  --muted: rgba(205, 220, 220, 0.6);
+  --border: #CDDCDC;
+  --footer-bg: #050505;
+
+  /* Typography */
+  --font-display: 'Serpantin', 'Georgia', serif;
+  --font-decor: 'Decor', 'Georgia', serif;
+  --font-body: 'SF Pro Display', 'Inter', -apple-system, sans-serif;
+
+  /* Sizes */
+  --radius-sm: 4px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-pill: 40px;
+
+  /* Layout */
+  --max-width: 1440px;
+  --padding-x: 40px;
+}

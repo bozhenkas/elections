@@ -1,0 +1,263 @@
+/* ===== Candidate Detail page ===== */
+.cd {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  width: 100%;
+  max-width: var(--max-width);
+  padding: 40px var(--padding-x) 80px;
+}
+
+.cd__back {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
+  text-transform: lowercase;
+  align-self: flex-start;
+  transition: color 0.15s;
+  cursor: pointer;
+}
+
+.cd__back:hover {
+  color: var(--accent);
+}
+
+/* Election context breadcrumb */
+.cd__election-context {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  line-height: 1;
+}
+
+.cd__election-decor {
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 18px;
+  color: rgba(238, 238, 238, 0.45);
+}
+
+.cd__election-title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: rgba(205, 220, 220, 0.45);
+  text-transform: uppercase;
+  letter-spacing: -0.5px;
+}
+
+/* Hero */
+.cd__hero {
+  display: flex;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+.cd__photo {
+  width: 200px;
+  height: 200px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 0.5px solid rgba(205, 220, 220, 0.25);
+  flex-shrink: 0;
+}
+
+.cd__photo img,
+.cd__photo svg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.cd__info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  flex: 1;
+}
+
+.cd__name {
+  font-family: var(--font-display);
+  font-size: 40px;
+  font-weight: 400;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+  line-height: 0.95;
+}
+
+.cd__meta {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.cd__meta-item {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--muted);
+}
+
+.cd__meta-sep {
+  color: rgba(205, 220, 220, 0.3);
+}
+
+/* Contacts wireframe */
+.cd__contacts-wf {
+  padding: 28px 24px 24px;
+}
+
+.cd__contacts-list {
+  display: flex;
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.cd__contact-link {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--accent);
+  border: 0.5px solid rgba(205, 220, 220, 0.3);
+  border-radius: var(--radius-pill);
+  padding: 4px 14px 6px;
+  text-decoration: none;
+  transition: all 0.15s;
+}
+
+.cd__contact-link:hover {
+  border-color: var(--accent);
+  background: rgba(205, 220, 220, 0.08);
+}
+
+.cd__contact-empty {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(249, 249, 249, 0.25);
+  padding-top: 8px;
+}
+
+/* Actions */
+.cd__actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cd__back-btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--muted);
+  border: 0.5px solid rgba(205, 220, 220, 0.25);
+  border-radius: var(--radius-pill);
+  padding: 8px 20px 10px;
+  text-transform: lowercase;
+  transition: all 0.15s;
+  cursor: pointer;
+}
+
+.cd__back-btn:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+}
+
+.cd__vote-btn {
+  font-family: var(--font-body);
+  font-size: 14px;
+  color: var(--accent);
+  border: 0.5px solid var(--accent);
+  border-radius: var(--radius-pill);
+  padding: 8px 20px 10px;
+  text-transform: lowercase;
+  transition: all 0.2s;
+  cursor: pointer;
+}
+
+.cd__vote-btn:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* Sections */
+.cd__section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.cd__section-title {
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 22px;
+  color: rgba(238, 238, 238, 0.5);
+  font-weight: 400;
+}
+
+/* ===== Responsive — Tablet ===== */
+@media (max-width: 1024px) {
+  .cd__name {
+    font-size: 32px;
+  }
+
+  .cd__photo {
+    width: 160px;
+    height: 160px;
+  }
+
+  .cd__section-title {
+    font-size: 19px;
+  }
+
+  .cd__election-title {
+    font-size: 18px;
+  }
+}
+
+/* ===== Responsive — Mobile ===== */
+@media (max-width: 768px) {
+  .cd {
+    padding: 24px 20px 60px;
+    gap: 28px;
+  }
+
+  .cd__hero {
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+  }
+
+  .cd__photo {
+    width: 140px;
+    height: 140px;
+  }
+
+  .cd__info {
+    align-items: center;
+    text-align: center;
+  }
+
+  .cd__name {
+    font-size: 26px;
+  }
+
+  .cd__actions {
+    justify-content: center;
+  }
+
+  .cd__contacts-wf {
+    padding: 24px 20px 20px;
+  }
+
+  .cd__contacts-list {
+    justify-content: center;
+  }
+
+  .cd__section-title {
+    font-size: 17px;
+  }
+
+  .cd__election-title {
+    font-size: 16px;
+  }
+}

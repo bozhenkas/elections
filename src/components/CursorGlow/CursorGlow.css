@@ -1,0 +1,43 @@
+.cursor-glow {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 224px;
+  height: 224px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(88, 139, 139, 0.09) 0%,
+    rgba(88, 139, 139, 0.055) 25%,
+    rgba(88, 139, 139, 0.025) 50%,
+    rgba(88, 139, 139, 0.008) 72%,
+    transparent 100%
+  );
+  transform: translate(0, 0);
+  translate: -50% -50%;
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform;
+  filter: blur(8px);
+}
+
+.cursor-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 9999;
+  will-change: transform;
+  /* glassmorphism в стиле сайта */
+  filter:
+    drop-shadow(0 0 6px rgba(205, 220, 220, 0.18))
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+  opacity: 0.92;
+}
+
+.cursor-custom img {
+  display: block;
+  width: 28px;
+  height: auto;
+  user-select: none;
+}

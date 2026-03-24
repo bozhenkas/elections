@@ -1,0 +1,196 @@
+.election-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--max-width);
+  background: rgba(88, 139, 139, 0.17);
+  border: 0.5px solid #636363;
+  border-radius: var(--radius-md);
+  padding: 32px var(--padding-x);
+  overflow: hidden;
+  cursor: pointer;
+  backdrop-filter: blur(0.15px);
+  -webkit-backdrop-filter: blur(0.15px);
+  position: relative;
+  --gx: 50%;
+  --gy: 50%;
+  --glow: 0;
+}
+
+/* spotlight от курсора — разливается по всей карточке */
+.election-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    380px circle at var(--gx) var(--gy),
+    rgba(205, 220, 220, 0.07) 0%,
+    rgba(205, 220, 220, 0.03) 40%,
+    transparent 70%
+  );
+  opacity: var(--glow);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.election-card--archive {
+  opacity: 0.6;
+}
+
+.election-card--archive:hover {
+  opacity: 0.85;
+}
+
+.election-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 90px;
+  flex: 1;
+  min-width: 0;
+}
+
+.election-card__badges {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.election-card__text {
+  line-height: 1;
+}
+
+.election-card__decor {
+  font-family: var(--font-decor);
+  font-style: italic;
+  font-size: 52px;
+  color: #eee;
+  letter-spacing: -1.04px;
+  display: block;
+  line-height: 1;
+  margin-bottom: -2px;
+}
+
+.election-card__title {
+  font-family: var(--font-display);
+  font-size: 80px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  line-height: 1;
+  font-weight: 400;
+}
+
+.election-card__subtitle {
+  font-family: var(--font-display);
+  font-size: 80px;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: -1px;
+  line-height: 1;
+  font-weight: 400;
+}
+
+.election-card__footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.election-card__countdown {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.election-card__button {
+  font-family: var(--font-body);
+  font-size: 15px;
+  color: var(--accent);
+  border: 0.5px solid var(--accent);
+  border-radius: var(--radius-pill);
+  padding: 8px 24px 10px;
+  text-transform: lowercase;
+  transition: all 0.2s;
+  margin-left: auto;
+}
+
+.election-card__button:hover {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+.election-card__silhouettes {
+  width: 420px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+}
+
+.election-card__silhouettes img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ===== Responsive — Tablet ===== */
+@media (max-width: 1024px) {
+  .election-card__title,
+  .election-card__subtitle {
+    font-size: 60px;
+  }
+
+  .election-card__decor {
+    font-size: 40px;
+  }
+
+  .election-card__content {
+    gap: 60px;
+  }
+
+  .election-card__silhouettes {
+    width: 300px;
+  }
+}
+
+/* ===== Responsive — Mobile ===== */
+@media (max-width: 768px) {
+  .election-card {
+    flex-direction: column;
+    padding: 24px 20px;
+    gap: 24px;
+  }
+
+  .election-card__badges {
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .election-card__title,
+  .election-card__subtitle {
+    font-size: 40px;
+  }
+
+  .election-card__decor {
+    font-size: 28px;
+  }
+
+  .election-card__silhouettes {
+    width: 100%;
+    max-width: 300px;
+    align-self: center;
+  }
+
+  .election-card__footer {
+    flex-wrap: wrap;
+  }
+
+  .election-card__button {
+    width: 100%;
+    text-align: center;
+    margin-left: 0;
+  }
+}

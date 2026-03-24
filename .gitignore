@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+dist-ssr/
+
+# Environment variables (never commit secrets)
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+nohup.out
+
+# Claude Code internal files (dev tooling, not project code)
+.claude/
+.agents/
+memory/
+skills-lock.json
+
+# Vite
+*.local
