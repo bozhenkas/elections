@@ -92,17 +92,16 @@
 .arc-card {
   position: absolute;
   top: 28px;
+  bottom: 28px; /* фиксирует высоту всех карточек одинаковой */
   left: 0;
   right: 0;
   max-width: 1442px;
   border-radius: 12px;
-  border: 0.5px solid #636363;
+  border: 0.5px solid var(--border-subtle);
   background: rgba(88, 139, 139, 0.17);
   backdrop-filter: blur(81.15px);
   -webkit-backdrop-filter: blur(81.15px);
   overflow: hidden;
-  /* Page-turn hinge on left edge */
-  transform-origin: left center;
   will-change: transform, opacity;
   transform-style: preserve-3d;
 }
@@ -129,10 +128,12 @@
 .arc-card__inner {
   display: flex;
   width: 100%;
+  height: 100%;
   padding: 32px 40px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 40px;
+  justify-content: space-between; /* равномерно растягивает контент по высоте */
+  gap: 20px;
 }
 
 /* ===== Header row ===== */

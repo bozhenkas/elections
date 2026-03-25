@@ -83,7 +83,7 @@ function getArchiveItems(t: (key: string) => string): ArchiveItem[] {
           name: 'ИТПП',
           candidates: [
             { name: 'Малика Гадар Бадар', percent: 57, isWinner: true },
-            { name: 'Подставной челик', percent: 20 },
+            { name: 'Смирнов А. В.', percent: 20 },
             { name: againstAll.toLowerCase(), percent: 23 },
           ],
         },
@@ -91,7 +91,7 @@ function getArchiveItems(t: (key: string) => string): ArchiveItem[] {
           name: 'ИСиТ',
           candidates: [
             { name: 'Малика Гадар Бадар', percent: 57, isWinner: true },
-            { name: 'Подставной челик', percent: 20 },
+            { name: 'Смирнов А. В.', percent: 20 },
             { name: againstAll.toLowerCase(), percent: 23 },
           ],
         },
@@ -99,7 +99,7 @@ function getArchiveItems(t: (key: string) => string): ArchiveItem[] {
           name: 'РТС',
           candidates: [
             { name: 'Малика Гадар Бадар', percent: 57, isWinner: true },
-            { name: 'Подставной челик', percent: 20 },
+            { name: 'Смирнов А. В.', percent: 20 },
             { name: againstAll.toLowerCase(), percent: 23 },
           ],
         },
@@ -277,25 +277,26 @@ function CardContent({ item, isExpanded, onExpand, onCollapse }: {
 
 const MAX_VISIBLE = MAX_ARCHIVE_STACK
 
-// Page-turn spring (dramatic, smooth)
-const PAGE_TURN_SPRING = {
-  type: 'spring' as const,
-  stiffness: 200,
-  damping: 28,
-  mass: 1.0,
+// карточка уходит вглубь стопки: поднимается, уменьшается, исчезает
+const PAGE_TURN_ANIM = {
+  type: 'tween' as const,
+  duration: 0.46,
+  ease: [0.4, 0, 0.9, 0.6] as [number, number, number, number],
 }
 
+// карточки стопки плавно занимают позицию
 const STACK_SPRING = {
   type: 'spring' as const,
-  stiffness: 320,
-  damping: 28,
-  mass: 0.8,
+  stiffness: 260,
+  damping: 34,
+  mass: 0.9,
 }
 
+// фронтальная карточка возвращается в нейтральное положение
 const FRONT_SPRING = {
   type: 'spring' as const,
-  stiffness: 380,
-  damping: 32,
+  stiffness: 340,
+  damping: 36,
   mass: 0.7,
 }
 
@@ -306,9 +307,10 @@ function depthStyle(depth: number) {
   return {
     x: d === 1 ? 21 : d === 2 ? 45 : 0,
     y: d * -13,
-    rotateY: 0,
-    opacity: 1,
     z: -d * 20,
+    scale: 1,
+    rotateZ: 0,
+    opacity: 1,
   }
 }
 
@@ -342,7 +344,7 @@ export default function ArchiveSection() {
     setFlyingId(frontId)
     setExpandedId(null)
 
-    // After page-turn animation, reorder
+    // After fly-out animation, reorder
     setTimeout(() => {
       setOrder(prev => {
         const next = [...prev]
@@ -352,7 +354,7 @@ export default function ArchiveSection() {
       })
       setFlyingId(null)
       setTimeout(() => { lockRef.current = false }, 500)
-    }, 450)
+    }, 380)
   }, [items, order])
 
   // Bring back card to front
@@ -419,25 +421,27 @@ export default function ArchiveSection() {
             // Breathing on back cards
             const backBreathY = [ds.y, ds.y - 3, ds.y] as number[]
 
-            // Page-turn: rotateY around left edge, fly forward then swing behind
+            // Card slides to back of stack while fading out, then reorders
             const animateTarget = isFlying
               ? {
-                  x: 0 as number,
-                  y: 0 as number | number[],
-                  rotateY: -120,
+                  x: 42 as number,
+                  y: -22 as number | number[],
+                  z: -60,
+                  scale: 0.88,
+                  rotateZ: 2,
                   opacity: 0,
-                  z: 100,
                 }
               : {
                   x: ds.x,
                   y: (!isFront ? backBreathY : ds.y) as number | number[],
-                  rotateY: ds.rotateY,
-                  opacity: ds.opacity,
                   z: ds.z,
+                  scale: ds.scale,
+                  rotateZ: ds.rotateZ,
+                  opacity: ds.opacity,
                 }
 
             const transition = isFlying
-              ? PAGE_TURN_SPRING
+              ? PAGE_TURN_ANIM
               : isFront
                 ? FRONT_SPRING
                 : {

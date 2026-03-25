@@ -35,6 +35,7 @@ export default function ElectionPage({
   const [confirmOpen, setConfirmOpen] = useState(false)
   const [successOpen, setSuccessOpen] = useState(false)
   const [votedLocal, setVotedLocal] = useState(hasVoted)
+  const [selectedCandidateId, setSelectedCandidateId] = useState<string | null>(null)
   const [expandedIdx, setExpandedIdx] = useState<number | null>(null)
 
   const statusLabel = election.status === 'upcoming'
@@ -59,7 +60,8 @@ export default function ElectionPage({
     setBallotOpen(true)
   }
 
-  const handleVoteSubmit = () => {
+  const handleVoteSubmit = (candidateId: string) => {
+    setSelectedCandidateId(candidateId)
     setBallotOpen(false)
     setConfirmOpen(true)
   }
@@ -69,7 +71,7 @@ export default function ElectionPage({
     setVotedLocal(true)
     setSuccessOpen(true)
     onVoted?.()
-    // TODO backend: POST /api/vote
+    // TODO backend: POST /api/vote { candidateId: selectedCandidateId }
   }
 
   return (
