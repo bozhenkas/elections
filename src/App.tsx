@@ -1,5 +1,4 @@
 import { useState, useCallback, useMemo } from 'react'
-import { useRouter } from './hooks/useRouter'
 import { I18nContext, useI18nState, useI18n } from './stores/i18n'
 import { getElectionById, getCandidateById, getActiveElection } from './mock'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -31,11 +30,14 @@ interface User {
 }
 
 export default function App() {
-  const { route, goHome, goElection, goCandidate } = useRouter()
   const i18n = useI18nState()
   const [user, setUser] = useState<User | null>(null)
   const [hasVoted, setHasVoted] = useState(false)
   const [authModalOpen, setAuthModalOpen] = useState(false)
+
+  // Modal-based navigation (no routing — per CLAUDE.md)
+  const [electionModalId, setElectionModalId] = useState<string | null>(null)
+  const [candidateModalId, setCandidateModalId] = useState<string | null>(null)
 
   const handleLogin = useCallback(() => {
     // TODO backend: OAuth через ЛК СПбГУТ
@@ -54,45 +56,28 @@ export default function App() {
 
   const handleElectionClick = useCallback(() => {
     const active = getActiveElection()
-    if (active) goElection(active.id)
-  }, [goElection])
+    if (active) setElectionModalId(active.id)
+  }, [])
 
-  const renderPage = () => {
-    switch (route.page) {
-      case 'election': {
-        const election = getElectionById(route.electionId || '')
-        if (!election) return <PageNotFound onHome={goHome} />
-        return (
-          <ElectionPage
-            election={election}
-            isAuthorized={!!user}
-            hasVoted={hasVoted}
-            onLogin={openAuthModal}
-            onViewCandidate={(cid) => goCandidate(election.id, cid)}
-            onBack={goHome}
-          />
-        )
-      }
+  const closeElectionModal = useCallback(() => {
+    setElectionModalId(null)
+    setCandidateModalId(null)
+  }, [])
 
-      case 'candidate': {
-        const election = getElectionById(route.electionId || '')
-        const candidate = getCandidateById(route.candidateId || '')
-        if (!election || !candidate) return <PageNotFound onHome={goHome} />
-        return (
-          <CandidateDetail
-            candidate={candidate}
-            electionTitle={`${i18n.t('election.chairman')} ${i18n.t('election.subtitle')}`}
-            onBack={() => goElection(election.id)}
-            onVote={!hasVoted && election.status === 'active' ? () => goElection(election.id) : undefined}
-          />
-        )
-      }
+  const openCandidateModal = useCallback((candidateId: string) => {
+    setCandidateModalId(candidateId)
+  }, [])
 
-      case 'home':
-      default:
-        return <HomePage onElectionClick={handleElectionClick} />
-    }
-  }
+  const closeCandidateModal = useCallback(() => {
+    setCandidateModalId(null)
+  }, [])
+
+  const handleVoted = useCallback(() => {
+    setHasVoted(true)
+  }, [])
+
+  const election = electionModalId ? getElectionById(electionModalId) : undefined
+  const candidate = candidateModalId ? getCandidateById(candidateModalId) : undefined
 
   return (
     <I18nContext.Provider value={i18n}>
@@ -100,9 +85,36 @@ export default function App() {
       <CursorGlow />
       <Header user={user} onLogin={openAuthModal} onLogout={handleLogout} />
 
-      {renderPage()}
+      <HomePage onElectionClick={handleElectionClick} />
 
-      {/* ─── Auth modal (global, accessible from any page) ──────────── */}
+      {/* ─── Election modal ──────────────────────────────────────── */}
+      <Modal isOpen={!!electionModalId && !!election && !candidateModalId} onClose={closeElectionModal}>
+        {election && (
+          <ElectionPage
+            election={election}
+            isAuthorized={!!user}
+            hasVoted={hasVoted}
+            onLogin={openAuthModal}
+            onViewCandidate={openCandidateModal}
+            onBack={closeElectionModal}
+            onVoted={handleVoted}
+          />
+        )}
+      </Modal>
+
+      {/* ─── Candidate detail modal ──────────────────────────────── */}
+      <Modal isOpen={!!candidateModalId && !!candidate} onClose={closeCandidateModal}>
+        {candidate && election && (
+          <CandidateDetail
+            candidate={candidate}
+            electionTitle={`${i18n.t('election.chairman')} ${i18n.t('election.subtitle')}`}
+            onBack={closeCandidateModal}
+            onVote={!hasVoted && election.status === 'active' ? closeCandidateModal : undefined}
+          />
+        )}
+      </Modal>
+
+      {/* ─── Auth modal (global) ─────────────────────────────────── */}
       <Modal isOpen={authModalOpen} onClose={() => setAuthModalOpen(false)}>
         <div className="modal-election">
           <div className="modal-election__header">
@@ -150,23 +162,5 @@ function HomePage({ onElectionClick }: { onElectionClick: () => void }) {
       <FAQSection items={faqItems} />
       <Footer />
     </>
-  )
-}
-
-// ─── 404 ─────────────────────────────────────────────────────────────────────
-
-function PageNotFound({ onHome }: { onHome: () => void }) {
-  const { t } = useI18n()
-  return (
-    <div className="not-found">
-      <div className="wf-block wf-block--centered">
-        <span className="wf-block__label">wireframe · 404</span>
-        <p className="not-found__title">{t('notFound.title')}</p>
-        <p className="wf-block__sub">{t('notFound.sub')}</p>
-        <button className="wf-block__btn" onClick={onHome}>
-          {t('notFound.home')} <span className="wf-block__arrow">→</span>
-        </button>
-      </div>
-    </div>
   )
 }

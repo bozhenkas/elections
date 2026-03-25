@@ -18,6 +18,7 @@ interface ElectionPageProps {
   onLogin: () => void
   onViewCandidate: (candidateId: string) => void
   onBack: () => void
+  onVoted?: () => void
 }
 
 export default function ElectionPage({
@@ -27,6 +28,7 @@ export default function ElectionPage({
   onLogin,
   onViewCandidate,
   onBack,
+  onVoted,
 }: ElectionPageProps) {
   const { t } = useI18n()
   const [ballotOpen, setBallotOpen] = useState(false)
@@ -66,6 +68,7 @@ export default function ElectionPage({
     setConfirmOpen(false)
     setVotedLocal(true)
     setSuccessOpen(true)
+    onVoted?.()
     // TODO backend: POST /api/vote
   }
 

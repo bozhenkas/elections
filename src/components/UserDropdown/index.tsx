@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useI18n } from '../../stores/i18n'
+import userIcon from '../../assets/atoms/user_icon.svg'
 import './UserDropdown.css'
 
 interface UserDropdownProps {
@@ -23,7 +24,7 @@ export default function UserDropdown({ name, onLogout }: UserDropdownProps) {
   return (
     <div className="user-dropdown" ref={ref}>
       <button className="user-dropdown__trigger" onClick={() => setOpen(!open)}>
-        <img src="/src/assets/atoms/user_icon.svg" alt="" className="user-dropdown__icon" />
+        <img src={userIcon} alt="" className="user-dropdown__icon" />
         <span className="user-dropdown__name-btn">{name}</span>
       </button>
 
