@@ -1,76 +1,102 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import './CursorGlow.css'
 
 const CLICKABLE = 'a, button, [role="button"], [onclick], .arc-card--front, .arc-card__back-click, .arc-card__cta-inline, .election-card, .wf-ballot__candidate, .faq__item, input[type="radio"], input[type="checkbox"], label'
 
+// Only render on devices with a fine pointer (mouse/trackpad)
+const HAS_POINTER = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
+
 export default function CursorGlow() {
   const cursorRef = useRef<HTMLDivElement>(null)
-  const [clicking, setClicking] = useState(false)
-  const [hasPointer, setHasPointer] = useState(true)
+  const hoveringRef = useRef(false)
+  const pressedRef = useRef(false)
+  const imgRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
-    // Hide entirely on touch-only devices
-    if (!window.matchMedia('(pointer: fine)').matches) {
-      setHasPointer(false)
-      return
-    }
-  }, [])
+    if (!HAS_POINTER) return
 
-  useEffect(() => {
-    if (!hasPointer) return
     let raf: number
     let mouseX = window.innerWidth / 2
     let mouseY = window.innerHeight / 2
     let curX = mouseX, curY = mouseY
-    const cursorEase = 0.65
+    const ease = 0.65
 
-    const show = () => { if (cursorRef.current) cursorRef.current.style.opacity = '' }
-    const hide = () => { if (cursorRef.current) cursorRef.current.style.opacity = '0' }
+    const el = cursorRef.current
+    if (!el) return
+
+    const show = () => { el.style.opacity = '' }
+    const hide = () => { el.style.opacity = '0' }
+
+    const updateImg = () => {
+      if (!imgRef.current) return
+      const src = pressedRef.current || hoveringRef.current
+        ? '/assets/atoms/cursor_click.svg'
+        : '/assets/atoms/cursor_normal.svg'
+      if (imgRef.current.src !== src) imgRef.current.src = src
+    }
 
     const onMove = (e: MouseEvent) => {
       mouseX = e.clientX
       mouseY = e.clientY
+
+      // Boundary check — most reliable Safari workaround for hiding
+      // when cursor leaves the viewport
+      if (e.clientX <= 1 || e.clientY <= 1 ||
+          e.clientX >= window.innerWidth - 1 ||
+          e.clientY >= window.innerHeight - 1) {
+        hide()
+        return
+      }
+
       show()
-      const target = e.target as HTMLElement
-      setClicking(target.closest(CLICKABLE) !== null)
+      const over = !!(e.target as HTMLElement).closest?.(CLICKABLE)
+      if (over !== hoveringRef.current) {
+        hoveringRef.current = over
+        updateImg()
+      }
     }
 
-    const update = () => {
-      curX += (mouseX - curX) * cursorEase
-      curY += (mouseY - curY) * cursorEase
-      if (cursorRef.current) cursorRef.current.style.transform = `translate(${curX}px, ${curY}px)`
-      raf = requestAnimationFrame(update)
-    }
+    const onDown = () => { pressedRef.current = true; updateImg() }
+    const onUp = () => { pressedRef.current = false; updateImg() }
 
-    // Works in Chrome/Firefox
     const onLeave = () => hide()
+    const onBlur = () => hide()
 
-    // Safari: mouseout with null relatedTarget = left the page
-    const onOut = (e: MouseEvent) => {
-      if (!e.relatedTarget) hide()
+    const loop = () => {
+      curX += (mouseX - curX) * ease
+      curY += (mouseY - curY) * ease
+      el.style.transform = `translate(${curX}px, ${curY}px)`
+      raf = requestAnimationFrame(loop)
     }
 
-    window.addEventListener('mousemove', onMove)
+    window.addEventListener('pointermove', onMove)
+    document.addEventListener('pointerdown', onDown)
+    document.addEventListener('pointerup', onUp)
+    document.addEventListener('pointercancel', onUp)
     document.addEventListener('mouseleave', onLeave)
     document.documentElement.addEventListener('mouseleave', onLeave)
-    document.documentElement.addEventListener('mouseout', onOut)
-    raf = requestAnimationFrame(update)
+    window.addEventListener('blur', onBlur)
+    raf = requestAnimationFrame(loop)
 
     return () => {
-      window.removeEventListener('mousemove', onMove)
+      window.removeEventListener('pointermove', onMove)
+      document.removeEventListener('pointerdown', onDown)
+      document.removeEventListener('pointerup', onUp)
+      document.removeEventListener('pointercancel', onUp)
       document.removeEventListener('mouseleave', onLeave)
       document.documentElement.removeEventListener('mouseleave', onLeave)
-      document.documentElement.removeEventListener('mouseout', onOut)
+      window.removeEventListener('blur', onBlur)
       cancelAnimationFrame(raf)
     }
-  }, [hasPointer])
+  }, [])
 
-  if (!hasPointer) return null
+  if (!HAS_POINTER) return null
 
   return (
     <div ref={cursorRef} className="cursor-custom" aria-hidden>
       <img
-        src={clicking ? '/assets/atoms/cursor_click.svg' : '/assets/atoms/cursor_normal.svg'}
+        ref={imgRef}
+        src="/assets/atoms/cursor_normal.svg"
         alt=""
         draggable={false}
       />
