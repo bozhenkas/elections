@@ -5,11 +5,14 @@
   isolation: isolate;
 }
 
-/* Background duplicate card — sits right behind for glass blur depth */
+/* Background duplicate card — offset right+up so it peeks from behind */
 .election-card-wrap::before {
   content: '';
   position: absolute;
-  inset: 0;
+  top: -10px;
+  left: 16px;
+  right: -16px;
+  bottom: 10px;
   border-radius: 12px;
   border: 0.5px solid #636363;
   background: rgba(88, 139, 139, 0.17);
