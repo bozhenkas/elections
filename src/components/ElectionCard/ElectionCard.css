@@ -2,6 +2,7 @@
   position: relative;
   width: 100%;
   max-width: var(--max-width);
+  isolation: isolate;
 }
 
 /* Background duplicate card — sits right behind for glass blur depth */

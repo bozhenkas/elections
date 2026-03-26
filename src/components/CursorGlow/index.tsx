@@ -40,22 +40,41 @@ export default function CursorGlow() {
       raf = requestAnimationFrame(update)
     }
 
+    // Safari doesn't reliably fire mouseleave on document —
+    // use mouseout on documentElement and check relatedTarget
+    const onOut = (e: MouseEvent) => {
+      if (!e.relatedTarget && !document.hasFocus()) {
+        if (cursorRef.current) cursorRef.current.style.opacity = '0'
+      }
+    }
     const onLeave = () => {
       if (cursorRef.current) cursorRef.current.style.opacity = '0'
     }
     const onEnter = () => {
       if (cursorRef.current) cursorRef.current.style.opacity = ''
     }
+    const onBlur = () => {
+      if (cursorRef.current) cursorRef.current.style.opacity = '0'
+    }
+    const onFocus = () => {
+      if (cursorRef.current) cursorRef.current.style.opacity = ''
+    }
 
     window.addEventListener('mousemove', onMove)
     document.addEventListener('mouseleave', onLeave)
     document.addEventListener('mouseenter', onEnter)
+    document.documentElement.addEventListener('mouseout', onOut)
+    window.addEventListener('blur', onBlur)
+    window.addEventListener('focus', onFocus)
     raf = requestAnimationFrame(update)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseleave', onLeave)
       document.removeEventListener('mouseenter', onEnter)
+      document.documentElement.removeEventListener('mouseout', onOut)
+      window.removeEventListener('blur', onBlur)
+      window.removeEventListener('focus', onFocus)
       cancelAnimationFrame(raf)
     }
   }, [hasPointer])
