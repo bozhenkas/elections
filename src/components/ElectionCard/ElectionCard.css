@@ -5,14 +5,14 @@
   isolation: isolate;
 }
 
-/* Background duplicate card — offset right+up so it peeks from behind */
+/* Background duplicate card — slight offset so edge peeks from behind */
 .election-card-wrap::before {
   content: '';
   position: absolute;
-  top: -10px;
-  left: 16px;
-  right: -16px;
-  bottom: 10px;
+  top: -6px;
+  left: 6px;
+  right: -6px;
+  bottom: 6px;
   border-radius: 12px;
   border: 0.5px solid #636363;
   background: rgba(88, 139, 139, 0.17);
