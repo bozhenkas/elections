@@ -6,8 +6,18 @@ const CLICKABLE = 'a, button, [role="button"], [onclick], .arc-card--front, .arc
 export default function CursorGlow() {
   const cursorRef = useRef<HTMLDivElement>(null)
   const [clicking, setClicking] = useState(false)
+  const [hasPointer, setHasPointer] = useState(true)
 
   useEffect(() => {
+    // Hide entirely on touch-only devices
+    if (!window.matchMedia('(pointer: fine)').matches) {
+      setHasPointer(false)
+      return
+    }
+  }, [])
+
+  useEffect(() => {
+    if (!hasPointer) return
     let raf: number
     let mouseX = window.innerWidth / 2
     let mouseY = window.innerHeight / 2
@@ -48,7 +58,9 @@ export default function CursorGlow() {
       document.removeEventListener('mouseenter', onEnter)
       cancelAnimationFrame(raf)
     }
-  }, [])
+  }, [hasPointer])
+
+  if (!hasPointer) return null
 
   return (
     <div ref={cursorRef} className="cursor-custom" aria-hidden>
