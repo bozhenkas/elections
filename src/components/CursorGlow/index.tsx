@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'react'
 import './CursorGlow.css'
 
-// Only render on devices with a fine pointer (mouse/trackpad)
+const CLICKABLE = 'a, button, [role="button"], [onclick], .arc-card--front, .arc-card__back-click, .arc-card__cta-inline, .election-card, .wf-ballot__candidate, .faq__item, input[type="radio"], input[type="checkbox"], label'
+
 const HAS_POINTER = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
 
 export default function CursorGlow() {
@@ -17,6 +18,8 @@ export default function CursorGlow() {
     let curX = mouseX, curY = mouseY
     const ease = 0.65
     let pressed = false
+    let hovering = false
+    let currentSrc = 'normal'
 
     const el = cursorRef.current
     if (!el) return
@@ -24,11 +27,19 @@ export default function CursorGlow() {
     const show = () => { el.style.opacity = '' }
     const hide = () => { el.style.opacity = '0' }
 
-    const setSrc = (click: boolean) => {
-      if (!imgRef.current) return
-      imgRef.current.setAttribute('src', click
-        ? '/assets/atoms/cursor_click.svg'
-        : '/assets/atoms/cursor_normal.svg')
+    const syncCursor = () => {
+      const want = (pressed || hovering) ? 'click' : 'normal'
+      if (want !== currentSrc && imgRef.current) {
+        currentSrc = want
+        imgRef.current.setAttribute('src', `/assets/atoms/cursor_${want}.svg`)
+      }
+    }
+
+    // Re-check what's under the cursor (works even if mouse didn't move)
+    const recheckHover = () => {
+      const target = document.elementFromPoint(mouseX, mouseY)
+      hovering = !!target?.closest?.(CLICKABLE)
+      syncCursor()
     }
 
     const onMove = (e: PointerEvent) => {
@@ -41,16 +52,28 @@ export default function CursorGlow() {
         hide()
         return
       }
+
       show()
+      hovering = !!(e.target as HTMLElement)?.closest?.(CLICKABLE)
+      syncCursor()
     }
 
-    const onDown = () => { pressed = true; setSrc(true) }
-    const onUp = () => { pressed = false; setSrc(false) }
+    const onDown = () => { pressed = true; syncCursor() }
+    const onUp = () => {
+      pressed = false
+      // DOM may have changed after click (modal open etc.) — re-check hover
+      requestAnimationFrame(recheckHover)
+    }
 
+    let frameCount = 0
     const loop = () => {
       curX += (mouseX - curX) * ease
       curY += (mouseY - curY) * ease
       el.style.transform = `translate(${curX}px, ${curY}px)`
+
+      // Re-check hover every 30 frames (~0.5s) to catch DOM changes
+      if (++frameCount % 30 === 0) recheckHover()
+
       raf = requestAnimationFrame(loop)
     }
 
