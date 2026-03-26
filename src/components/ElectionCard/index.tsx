@@ -41,7 +41,7 @@ export default function ElectionCard({
   return (
     <div className="election-card-wrap">
       <div
-        className={`election-card ${isArchive ? 'election-card--archive' : ''}`}
+        className={`election-card glass-spotlight ${isArchive ? 'election-card--archive' : ''}`}
         onClick={onClick}
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseLeave}

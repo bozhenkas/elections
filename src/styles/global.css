@@ -64,3 +64,29 @@ p, h1, h2, h3, h4, h5, h6 {
     gap: 32px;
   }
 }
+
+/* ===== Glass spotlight — reusable cursor-tracking glow for any glass element =====
+   Usage: add class "glass-spotlight" + set CSS vars --gx, --gy, --glow via JS
+   The element must have position: relative and overflow: hidden */
+.glass-spotlight {
+  --gx: 50%;
+  --gy: 50%;
+  --glow: 0;
+}
+
+.glass-spotlight::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(
+    380px circle at var(--gx) var(--gy),
+    rgba(205, 220, 220, 0.07) 0%,
+    rgba(205, 220, 220, 0.03) 40%,
+    transparent 70%
+  );
+  opacity: var(--glow);
+  transition: opacity 0.5s ease;
+  pointer-events: none;
+  z-index: 0;
+}

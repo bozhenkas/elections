@@ -2,19 +2,39 @@
   position: relative;
   width: 100%;
   max-width: var(--max-width);
+  /* Isolate stacking context so z-index: -1/-2 children don't fall behind page bg */
+  isolation: isolate;
+}
+
+/* Glow layer — soft light bleed behind the card for frosted-glass depth */
+.election-card-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -40px;
+  border-radius: 50px;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    rgba(140, 180, 180, 0.14) 0%,
+    rgba(100, 150, 150, 0.07) 40%,
+    transparent 70%
+  );
+  filter: blur(30px);
+  z-index: -2;
+  pointer-events: none;
 }
 
 /* Background duplicate card — exact same size, sits right behind for glass blur depth */
-.election-card-wrap::before {
+.election-card-wrap::after {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: 12px;
   border: 0.5px solid #636363;
   background: rgba(88, 139, 139, 0.17);
-  backdrop-filter: blur(0.1498715728521347px);
-  -webkit-backdrop-filter: blur(0.1498715728521347px);
+  backdrop-filter: blur(81.1500015258789px);
+  -webkit-backdrop-filter: blur(81.1500015258789px);
   z-index: -1;
+  pointer-events: none;
 }
 
 .election-card {
@@ -28,30 +48,12 @@
   padding: 32px var(--padding-x);
   overflow: hidden;
   cursor: pointer;
-  backdrop-filter: blur(0.15px);
-  -webkit-backdrop-filter: blur(0.15px);
+  backdrop-filter: blur(81.1500015258789px);
+  -webkit-backdrop-filter: blur(81.1500015258789px);
+  box-shadow:
+    0 0 60px 10px rgba(120, 160, 160, 0.07),
+    0 0 120px 40px rgba(100, 140, 140, 0.04);
   position: relative;
-  --gx: 50%;
-  --gy: 50%;
-  --glow: 0;
-}
-
-/* spotlight от курсора — разливается по всей карточке */
-.election-card::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background: radial-gradient(
-    380px circle at var(--gx) var(--gy),
-    rgba(205, 220, 220, 0.07) 0%,
-    rgba(205, 220, 220, 0.03) 40%,
-    transparent 70%
-  );
-  opacity: var(--glow);
-  transition: opacity 0.5s ease;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .election-card--archive {
