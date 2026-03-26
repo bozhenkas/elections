@@ -18,7 +18,8 @@ export default function CursorGlow() {
     let curX = mouseX, curY = mouseY
     const ease = 0.65
     let pressed = false
-    let currentState = '' // 'normal' | 'click' | 'click-pressed'
+    let currentState = ''
+    let frames = 0
 
     const el = cursorRef.current
     if (!el) return
@@ -27,8 +28,12 @@ export default function CursorGlow() {
     const hide = () => { el.style.opacity = '0' }
 
     const isOverClickable = () => {
+      // Temporarily hide cursor div so elementFromPoint can't hit it
+      el.style.display = 'none'
       const target = document.elementFromPoint(mouseX, mouseY)
-      return !!target?.closest?.(CLICKABLE)
+      el.style.display = ''
+      if (!target) return false
+      return !!target.closest(CLICKABLE)
     }
 
     const syncCursor = () => {
@@ -44,9 +49,8 @@ export default function CursorGlow() {
 
       if (want !== currentState && imgRef.current) {
         currentState = want
-        const file = want === 'click-pressed' || want === 'click' ? 'click' : 'normal'
+        const file = want.startsWith('click') ? 'click' : 'normal'
         imgRef.current.setAttribute('src', `/assets/atoms/cursor_${file}.svg`)
-        // 15% darker when pressed
         imgRef.current.style.filter = want === 'click-pressed' ? 'brightness(0.85)' : ''
       }
     }
@@ -69,7 +73,6 @@ export default function CursorGlow() {
     const onDown = () => { pressed = true; syncCursor() }
     const onUp = () => {
       pressed = false
-      // DOM may change after click — recheck after repaint
       requestAnimationFrame(syncCursor)
     }
 
@@ -78,8 +81,8 @@ export default function CursorGlow() {
       curY += (mouseY - curY) * ease
       el.style.transform = `translate(${curX}px, ${curY}px)`
 
-      // Periodic recheck to catch DOM changes without mouse movement
-      if (raf % 20 === 0) syncCursor()
+      // Recheck hover every ~20 frames to catch DOM changes
+      if (++frames % 20 === 0) syncCursor()
 
       raf = requestAnimationFrame(loop)
     }
