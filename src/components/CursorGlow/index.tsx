@@ -1,15 +1,11 @@
 import { useEffect, useRef } from 'react'
 import './CursorGlow.css'
 
-const CLICKABLE = 'a, button, [role="button"], [onclick], .arc-card--front, .arc-card__back-click, .arc-card__cta-inline, .election-card, .wf-ballot__candidate, .faq__item, input[type="radio"], input[type="checkbox"], label'
-
 // Only render on devices with a fine pointer (mouse/trackpad)
 const HAS_POINTER = typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
 
 export default function CursorGlow() {
   const cursorRef = useRef<HTMLDivElement>(null)
-  const hoveringRef = useRef(false)
-  const pressedRef = useRef(false)
   const imgRef = useRef<HTMLImageElement>(null)
 
   useEffect(() => {
@@ -20,6 +16,7 @@ export default function CursorGlow() {
     let mouseY = window.innerHeight / 2
     let curX = mouseX, curY = mouseY
     const ease = 0.65
+    let pressed = false
 
     const el = cursorRef.current
     if (!el) return
@@ -27,40 +24,28 @@ export default function CursorGlow() {
     const show = () => { el.style.opacity = '' }
     const hide = () => { el.style.opacity = '0' }
 
-    const updateImg = () => {
+    const setSrc = (click: boolean) => {
       if (!imgRef.current) return
-      const src = pressedRef.current || hoveringRef.current
+      imgRef.current.setAttribute('src', click
         ? '/assets/atoms/cursor_click.svg'
-        : '/assets/atoms/cursor_normal.svg'
-      if (imgRef.current.src !== src) imgRef.current.src = src
+        : '/assets/atoms/cursor_normal.svg')
     }
 
-    const onMove = (e: MouseEvent) => {
+    const onMove = (e: PointerEvent) => {
       mouseX = e.clientX
       mouseY = e.clientY
 
-      // Boundary check — most reliable Safari workaround for hiding
-      // when cursor leaves the viewport
       if (e.clientX <= 1 || e.clientY <= 1 ||
           e.clientX >= window.innerWidth - 1 ||
           e.clientY >= window.innerHeight - 1) {
         hide()
         return
       }
-
       show()
-      const over = !!(e.target as HTMLElement).closest?.(CLICKABLE)
-      if (over !== hoveringRef.current) {
-        hoveringRef.current = over
-        updateImg()
-      }
     }
 
-    const onDown = () => { pressedRef.current = true; updateImg() }
-    const onUp = () => { pressedRef.current = false; updateImg() }
-
-    const onLeave = () => hide()
-    const onBlur = () => hide()
+    const onDown = () => { pressed = true; setSrc(true) }
+    const onUp = () => { pressed = false; setSrc(false) }
 
     const loop = () => {
       curX += (mouseX - curX) * ease
@@ -73,9 +58,9 @@ export default function CursorGlow() {
     document.addEventListener('pointerdown', onDown)
     document.addEventListener('pointerup', onUp)
     document.addEventListener('pointercancel', onUp)
-    document.addEventListener('mouseleave', onLeave)
-    document.documentElement.addEventListener('mouseleave', onLeave)
-    window.addEventListener('blur', onBlur)
+    document.addEventListener('mouseleave', hide)
+    document.documentElement.addEventListener('mouseleave', hide)
+    window.addEventListener('blur', hide)
     raf = requestAnimationFrame(loop)
 
     return () => {
@@ -83,9 +68,9 @@ export default function CursorGlow() {
       document.removeEventListener('pointerdown', onDown)
       document.removeEventListener('pointerup', onUp)
       document.removeEventListener('pointercancel', onUp)
-      document.removeEventListener('mouseleave', onLeave)
-      document.documentElement.removeEventListener('mouseleave', onLeave)
-      window.removeEventListener('blur', onBlur)
+      document.removeEventListener('mouseleave', hide)
+      document.documentElement.removeEventListener('mouseleave', hide)
+      window.removeEventListener('blur', hide)
       cancelAnimationFrame(raf)
     }
   }, [])
