@@ -18,8 +18,7 @@ export default function CursorGlow() {
     let curX = mouseX, curY = mouseY
     const ease = 0.65
     let pressed = false
-    let hovering = false
-    let currentSrc = 'normal'
+    let currentState = '' // 'normal' | 'click' | 'click-pressed'
 
     const el = cursorRef.current
     if (!el) return
@@ -27,19 +26,29 @@ export default function CursorGlow() {
     const show = () => { el.style.opacity = '' }
     const hide = () => { el.style.opacity = '0' }
 
-    const syncCursor = () => {
-      const want = (pressed || hovering) ? 'click' : 'normal'
-      if (want !== currentSrc && imgRef.current) {
-        currentSrc = want
-        imgRef.current.setAttribute('src', `/assets/atoms/cursor_${want}.svg`)
-      }
+    const isOverClickable = () => {
+      const target = document.elementFromPoint(mouseX, mouseY)
+      return !!target?.closest?.(CLICKABLE)
     }
 
-    // Re-check what's under the cursor (works even if mouse didn't move)
-    const recheckHover = () => {
-      const target = document.elementFromPoint(mouseX, mouseY)
-      hovering = !!target?.closest?.(CLICKABLE)
-      syncCursor()
+    const syncCursor = () => {
+      const hovering = isOverClickable()
+      let want: string
+      if (pressed && hovering) {
+        want = 'click-pressed'
+      } else if (hovering) {
+        want = 'click'
+      } else {
+        want = 'normal'
+      }
+
+      if (want !== currentState && imgRef.current) {
+        currentState = want
+        const file = want === 'click-pressed' || want === 'click' ? 'click' : 'normal'
+        imgRef.current.setAttribute('src', `/assets/atoms/cursor_${file}.svg`)
+        // 15% darker when pressed
+        imgRef.current.style.filter = want === 'click-pressed' ? 'brightness(0.85)' : ''
+      }
     }
 
     const onMove = (e: PointerEvent) => {
@@ -54,25 +63,23 @@ export default function CursorGlow() {
       }
 
       show()
-      hovering = !!(e.target as HTMLElement)?.closest?.(CLICKABLE)
       syncCursor()
     }
 
     const onDown = () => { pressed = true; syncCursor() }
     const onUp = () => {
       pressed = false
-      // DOM may have changed after click (modal open etc.) — re-check hover
-      requestAnimationFrame(recheckHover)
+      // DOM may change after click — recheck after repaint
+      requestAnimationFrame(syncCursor)
     }
 
-    let frameCount = 0
     const loop = () => {
       curX += (mouseX - curX) * ease
       curY += (mouseY - curY) * ease
       el.style.transform = `translate(${curX}px, ${curY}px)`
 
-      // Re-check hover every 30 frames (~0.5s) to catch DOM changes
-      if (++frameCount % 30 === 0) recheckHover()
+      // Periodic recheck to catch DOM changes without mouse movement
+      if (raf % 20 === 0) syncCursor()
 
       raf = requestAnimationFrame(loop)
     }
