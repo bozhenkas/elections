@@ -65,12 +65,14 @@ p, h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* ===== Glass spotlight — reusable cursor-tracking glow for any glass element =====
-   Usage: add class "glass-spotlight" + set CSS vars --gx, --gy, --glow via JS
+/* ===== Glass lava spotlight — organic cursor-tracking glow =====
+   Usage: add class "glass-spotlight" + use useLavaSpotlight() hook
    The element must have position: relative and overflow: hidden */
 .glass-spotlight {
-  --gx: 50%;
-  --gy: 50%;
+  --b0x: 50%; --b0y: 50%;
+  --b1x: 50%; --b1y: 50%;
+  --b2x: 50%; --b2y: 50%;
+  --b3x: 50%; --b3y: 50%;
   --glow: 0;
 }
 
@@ -79,14 +81,17 @@ p, h1, h2, h3, h4, h5, h6 {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(
-    380px circle at var(--gx) var(--gy),
-    rgba(205, 220, 220, 0.07) 0%,
-    rgba(205, 220, 220, 0.03) 40%,
-    transparent 70%
-  );
+  background:
+    radial-gradient(180px circle at var(--b0x) var(--b0y),
+      rgba(205, 220, 220, 0.09) 0%, transparent 70%),
+    radial-gradient(240px circle at var(--b1x) var(--b1y),
+      rgba(180, 210, 210, 0.07) 0%, transparent 65%),
+    radial-gradient(160px circle at var(--b2x) var(--b2y),
+      rgba(205, 220, 220, 0.06) 0%, transparent 60%),
+    radial-gradient(300px circle at var(--b3x) var(--b3y),
+      rgba(160, 200, 200, 0.04) 0%, transparent 70%);
   opacity: var(--glow);
-  transition: opacity 0.5s ease;
+  transition: opacity 0.6s ease;
   pointer-events: none;
   z-index: 0;
 }

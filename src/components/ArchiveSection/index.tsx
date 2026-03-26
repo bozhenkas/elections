@@ -1,7 +1,8 @@
-import { useState, useRef, useCallback, useMemo, type MouseEvent as ReactMouseEvent } from 'react'
+import { useState, useRef, useCallback, useMemo } from 'react'
 import { MAX_ARCHIVE_STACK } from '../../constants'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../../stores/i18n'
+import { useLavaSpotlight } from '../../hooks/useLavaSpotlight'
 import Badge from '../Badge'
 import './ArchiveSection.css'
 
@@ -432,18 +433,7 @@ export default function ArchiveSection() {
     setTimeout(() => { lockRef.current = false }, 700)
   }, [items])
 
-  const handleSpotlightMove = useCallback((e: ReactMouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width) * 100
-    const y = ((e.clientY - rect.top) / rect.height) * 100
-    e.currentTarget.style.setProperty('--gx', `${x}%`)
-    e.currentTarget.style.setProperty('--gy', `${y}%`)
-    e.currentTarget.style.setProperty('--glow', '1')
-  }, [])
-
-  const handleSpotlightLeave = useCallback((e: ReactMouseEvent<HTMLDivElement>) => {
-    e.currentTarget.style.setProperty('--glow', '0')
-  }, [])
+  const { onMouseMove: handleSpotlightMove, onMouseLeave: handleSpotlightLeave } = useLavaSpotlight()
 
   const expandCard = useCallback((id: string) => {
     setExpandedId(id)

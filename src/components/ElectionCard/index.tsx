@@ -1,4 +1,5 @@
 import { useI18n } from '../../stores/i18n'
+import { useLavaSpotlight } from '../../hooks/useLavaSpotlight'
 import Badge from '../Badge'
 import './ElectionCard.css'
 
@@ -24,27 +25,15 @@ export default function ElectionCard({
   onClick,
 }: ElectionCardProps) {
   const { t } = useI18n()
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect()
-    const x = ((e.clientX - rect.left) / rect.width) * 100
-    const y = ((e.clientY - rect.top) / rect.height) * 100
-    e.currentTarget.style.setProperty('--gx', `${x}%`)
-    e.currentTarget.style.setProperty('--gy', `${y}%`)
-    e.currentTarget.style.setProperty('--glow', '1')
-  }
-
-  const handleMouseLeave = (e: React.MouseEvent<HTMLDivElement>) => {
-    e.currentTarget.style.setProperty('--glow', '0')
-  }
+  const { onMouseMove, onMouseLeave } = useLavaSpotlight()
 
   return (
     <div className="election-card-wrap">
       <div
         className={`election-card glass-spotlight ${isArchive ? 'election-card--archive' : ''}`}
         onClick={onClick}
-        onMouseMove={handleMouseMove}
-        onMouseLeave={handleMouseLeave}
+        onMouseMove={onMouseMove}
+        onMouseLeave={onMouseLeave}
       >
         <div className="election-card__content">
           <div className="election-card__badges">
