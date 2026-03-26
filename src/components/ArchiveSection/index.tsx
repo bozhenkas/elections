@@ -354,8 +354,8 @@ const FRONT_SPRING = {
 function depthStyle(depth: number) {
   if (depth === 0) return { x: 0, y: 0, z: 0, scale: 1, rotateZ: 0, opacity: 1 }
   if (depth === 1) return { x: 16, y: -10, z: -15, scale: 1, rotateZ: 0, opacity: 1 }
-  // depth 2: starts hidden behind, slides in during page-turn
-  return { x: 32, y: -20, z: -30, scale: 1, rotateZ: 0, opacity: 0 }
+  // depth 2: same position as depth 1 but invisible — fades in smoothly
+  return { x: 16, y: -10, z: -15, scale: 1, rotateZ: 0, opacity: 0 }
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
@@ -484,19 +484,24 @@ export default function ArchiveSection() {
                   opacity: ds.opacity,
                 }
 
+            // Incoming card (depth 2) gets a gentle fade-in spring
+            const isIncoming = depth === MAX_VISIBLE
+
             const transition = isFlying
               ? PAGE_TURN_ANIM
               : isFront
                 ? FRONT_SPRING
-                : {
-                    ...STACK_SPRING,
-                    y: {
-                      repeat: Infinity,
-                      repeatType: 'mirror' as const,
-                      duration: 3.6 + depth * 0.6,
-                      ease: 'easeInOut',
-                    },
-                  }
+                : isIncoming
+                  ? { ...STACK_SPRING, opacity: { duration: 0.5, ease: 'easeOut' } }
+                  : {
+                      ...STACK_SPRING,
+                      y: {
+                        repeat: Infinity,
+                        repeatType: 'mirror' as const,
+                        duration: 3.6 + depth * 0.6,
+                        ease: 'easeInOut',
+                      },
+                    }
 
             return (
               <motion.div
