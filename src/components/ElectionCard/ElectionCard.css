@@ -4,16 +4,16 @@
   max-width: var(--max-width);
 }
 
-/* Background duplicate card for glass blur depth effect */
+/* Background duplicate card — exact same size, sits right behind for glass blur depth */
 .election-card-wrap::before {
   content: '';
   position: absolute;
-  inset: 6px -4px -6px 4px;
-  border-radius: var(--radius-md);
-  border: 0.5px solid rgba(99, 99, 99, 0.4);
-  background: rgba(88, 139, 139, 0.10);
-  backdrop-filter: blur(40px);
-  -webkit-backdrop-filter: blur(40px);
+  inset: 0;
+  border-radius: 12px;
+  border: 0.5px solid #636363;
+  background: rgba(88, 139, 139, 0.17);
+  backdrop-filter: blur(0.1498715728521347px);
+  -webkit-backdrop-filter: blur(0.1498715728521347px);
   z-index: -1;
 }
 
