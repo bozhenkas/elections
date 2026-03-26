@@ -1,9 +1,27 @@
+.election-card-wrap {
+  position: relative;
+  width: 100%;
+  max-width: var(--max-width);
+}
+
+/* Background duplicate card for glass blur depth effect */
+.election-card-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 6px -4px -6px 4px;
+  border-radius: var(--radius-md);
+  border: 0.5px solid rgba(99, 99, 99, 0.4);
+  background: rgba(88, 139, 139, 0.10);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(40px);
+  z-index: -1;
+}
+
 .election-card {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  max-width: var(--max-width);
   background: rgba(88, 139, 139, 0.17);
   border: 0.5px solid var(--border-subtle);
   border-radius: var(--radius-md);

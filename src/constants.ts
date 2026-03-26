@@ -4,4 +4,4 @@
 export const VOTE_WINDOW_HOURS = 8
 
 // максимум карточек в стопке архива
-export const MAX_ARCHIVE_STACK = 3
+export const MAX_ARCHIVE_STACK = 2

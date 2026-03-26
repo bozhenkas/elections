@@ -350,17 +350,12 @@ const FRONT_SPRING = {
 }
 
 // Depth → visual properties
-// Tighter stacking: cards are closer together
+// 2 visible cards + 1 incoming during animation
 function depthStyle(depth: number) {
-  const d = Math.min(depth, MAX_VISIBLE - 1)
-  return {
-    x: d === 1 ? 14 : d === 2 ? 28 : 0,
-    y: d * -8,
-    z: -d * 10,
-    scale: 1,
-    rotateZ: 0,
-    opacity: 1,
-  }
+  if (depth === 0) return { x: 0, y: 0, z: 0, scale: 1, rotateZ: 0, opacity: 1 }
+  if (depth === 1) return { x: 16, y: -10, z: -15, scale: 1, rotateZ: 0, opacity: 1 }
+  // depth 2: starts hidden behind, slides in during page-turn
+  return { x: 32, y: -20, z: -30, scale: 1, rotateZ: 0, opacity: 0 }
 }
 
 // ─── Main component ───────────────────────────────────────────────────────────
@@ -457,7 +452,8 @@ export default function ArchiveSection() {
         >
           {order.map((itemIdx, depth) => {
             const item = items[itemIdx]
-            const isVisible = depth < MAX_VISIBLE
+            // Show 2 cards normally + 1 extra during fly animation (slides in)
+            const isVisible = depth < MAX_VISIBLE || (depth === MAX_VISIBLE && flyingId !== null)
             const isFlying = flyingId === item.id
             const isFront = depth === 0
             const isExpanded = expandedId === item.id && isFront

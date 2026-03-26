@@ -39,46 +39,48 @@ export default function ElectionCard({
   }
 
   return (
-    <div
-      className={`election-card ${isArchive ? 'election-card--archive' : ''}`}
-      onClick={onClick}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-    >
-      <div className="election-card__content">
-        <div className="election-card__badges">
-          {!isArchive && <Badge variant="pink">{t('election.upcoming')}</Badge>}
-          {isArchive && <Badge variant="outline">{t('election.completed')}</Badge>}
-          <Badge variant={isArchive ? 'outline' : 'outline-pink'}>{date}</Badge>
-          <Badge variant={isArchive ? 'outline' : 'pink'}>{time}</Badge>
+    <div className="election-card-wrap">
+      <div
+        className={`election-card ${isArchive ? 'election-card--archive' : ''}`}
+        onClick={onClick}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div className="election-card__content">
+          <div className="election-card__badges">
+            {!isArchive && <Badge variant="pink">{t('election.upcoming')}</Badge>}
+            {isArchive && <Badge variant="outline">{t('election.completed')}</Badge>}
+            <Badge variant={isArchive ? 'outline' : 'outline-pink'}>{date}</Badge>
+            <Badge variant={isArchive ? 'outline' : 'pink'}>{time}</Badge>
+          </div>
+
+          <div className="election-card__text">
+            <span className="election-card__decor">{t('election.decor')}</span>
+            <h2 className="election-card__title">{title}</h2>
+            <h3 className="election-card__subtitle">{subtitle || t('election.subtitle')}</h3>
+          </div>
+
+          <div className="election-card__footer">
+            {daysLeft != null && (
+              <div className="election-card__countdown">
+                <Badge variant="outline-pink">{t('election.daysLeft')}</Badge>
+                <Badge variant="pink">{` ${daysLeft} ${t('election.days')}`}</Badge>
+              </div>
+            )}
+            {result && (
+              <div className="election-card__result">
+                <Badge variant="outline">{result}</Badge>
+              </div>
+            )}
+            <button className="election-card__button">
+              {isArchive ? t('election.results') : t('election.goto')}
+            </button>
+          </div>
         </div>
 
-        <div className="election-card__text">
-          <span className="election-card__decor">{t('election.decor')}</span>
-          <h2 className="election-card__title">{title}</h2>
-          <h3 className="election-card__subtitle">{subtitle || t('election.subtitle')}</h3>
+        <div className="election-card__silhouettes">
+          <img src="/assets/atoms/avatars.svg" alt="" />
         </div>
-
-        <div className="election-card__footer">
-          {daysLeft != null && (
-            <div className="election-card__countdown">
-              <Badge variant="outline-pink">{t('election.daysLeft')}</Badge>
-              <Badge variant="pink">{` ${daysLeft} ${t('election.days')}`}</Badge>
-            </div>
-          )}
-          {result && (
-            <div className="election-card__result">
-              <Badge variant="outline">{result}</Badge>
-            </div>
-          )}
-          <button className="election-card__button">
-            {isArchive ? t('election.results') : t('election.goto')}
-          </button>
-        </div>
-      </div>
-
-      <div className="election-card__silhouettes">
-        <img src="/assets/atoms/avatars.svg" alt="" />
       </div>
     </div>
   )
