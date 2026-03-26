@@ -10,7 +10,6 @@
 
 /* Title */
 .archive__title {
-  margin-bottom: 40px;
   font-family: var(--font-display);
   font-size: 48px;
   font-weight: 400;
@@ -36,11 +35,11 @@
   perspective-origin: 50% 50%;
 }
 
-/* Year navigation for large archives */
+/* Year navigation */
 .archive__nav {
   display: flex;
   gap: 8px;
-  margin-top: 20px;
+  margin-top: 10px;
   flex-wrap: wrap;
   justify-content: center;
 }
@@ -58,9 +57,8 @@
 }
 
 .archive__nav-btn:hover {
-  color: var(--accent);
-  border-color: rgba(205, 220, 220, 0.4);
-  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
+  color: var(--white);
+  border-color: rgba(205, 220, 220, 0.5);
 }
 
 .archive__nav-btn--active {
@@ -69,36 +67,18 @@
   border-color: var(--pink);
 }
 
-/* Counter */
-.archive__counter {
-  margin-top: 12px;
-  font-family: var(--font-body);
-  font-size: 13px;
-  color: rgba(205, 220, 220, 0.35);
-  letter-spacing: 0.02em;
-}
-
-/* Hint */
-.archive__hint {
-  margin-top: 16px;
-  font-family: var(--font-decor);
-  font-style: italic;
-  font-size: 14px;
-  color: rgba(205, 220, 220, 0.4);
-  letter-spacing: 0.01em;
-}
-
-/* ===== Card base — per Figma ===== */
+/* ===== Card base ===== */
 .arc-card {
   position: absolute;
   top: 28px;
-  bottom: 28px; /* фиксирует высоту всех карточек одинаковой */
+  bottom: 28px;
   left: 0;
   right: 0;
   max-width: 1442px;
   border-radius: 12px;
   border: 0.5px solid var(--border-subtle);
   background: rgba(88, 139, 139, 0.17);
+  /* backdrop-filter on all visible cards to prevent see-through */
   backdrop-filter: blur(81.15px);
   -webkit-backdrop-filter: blur(81.15px);
   overflow: hidden;
@@ -123,8 +103,16 @@
   cursor: pointer;
 }
 
-/* ===== Card inner layout — per Figma ===== */
-/* Both states: flex column, 1442px, padding 32px 40px */
+/* Back cards: simple click area (no overlay text) */
+.arc-card__back-click {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* ===== Card inner layout ===== */
 .arc-card__inner {
   display: flex;
   width: 100%;
@@ -132,7 +120,7 @@
   padding: 32px 40px;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: space-between; /* равномерно растягивает контент по высоте */
+  justify-content: space-between;
   gap: 20px;
 }
 
@@ -173,7 +161,7 @@
   white-space: pre-line;
 }
 
-/* ===== Badges — uses shared Badge component ===== */
+/* ===== Badges ===== */
 .arc-card__badges {
   display: flex;
   gap: 0;
@@ -277,7 +265,6 @@
 .arc-card__collapse-btn:hover {
   color: var(--accent);
   border-color: rgba(205, 220, 220, 0.45);
-  box-shadow: 0 4px 30px 0 rgba(255, 255, 255, 0.02);
 }
 
 .arc-card__council {
@@ -315,7 +302,7 @@
   align-items: flex-end;
 }
 
-/* ===== Turnout — pixel-perfect per Figma ===== */
+/* ===== Turnout ===== */
 .arc-turnout {
   display: flex;
   width: 100%;
@@ -415,24 +402,6 @@
   cursor: pointer;
   pointer-events: auto;
   position: relative;
-  z-index: 3;
-}
-
-/* ===== НАЖМИТЕ — full overlay (back cards) ===== */
-.arc-card__cta-overlay {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  padding: 20px;
-  background: rgba(12, 12, 12, 0.62);
-  border-radius: 12px;
-  pointer-events: auto;
-  cursor: pointer;
-  backdrop-filter: blur(2px);
   z-index: 3;
 }
 

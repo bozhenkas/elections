@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback, useMemo } from 'react'
+import { useState, useRef, useCallback, useMemo } from 'react'
 import { MAX_ARCHIVE_STACK } from '../../constants'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useI18n } from '../../stores/i18n'
@@ -48,84 +48,133 @@ interface CouncilsElection {
 
 type ArchiveItem = SimpleElection | CouncilsElection
 
+// ─── Candidate name pools ────────────────────────────────────────────────────
+
+const LAST_NAMES = [
+  'Иванов', 'Петрова', 'Сидоров', 'Козлова', 'Новиков',
+  'Фёдорова', 'Морозов', 'Волкова', 'Алексеев', 'Лебедева',
+  'Семёнов', 'Егорова', 'Павлов', 'Кузнецова', 'Степанов',
+  'Николаева', 'Орлов', 'Андреева', 'Макаров', 'Захарова',
+  'Васильев', 'Соколова', 'Михайлов', 'Попова', 'Григорьев',
+]
+
+const INITIALS = [
+  'А. В.', 'И. С.', 'Д. М.', 'Е. К.', 'М. А.',
+  'К. Р.', 'О. Н.', 'П. Л.', 'Н. Г.', 'С. Т.',
+  'В. Д.', 'Л. Ф.', 'Г. Ю.', 'Т. Б.', 'Р. П.',
+]
+
+// Deterministic pseudo-random based on seed
+function seededRandom(seed: number): () => number {
+  let s = seed
+  return () => {
+    s = (s * 16807 + 0) % 2147483647
+    return (s - 1) / 2147483646
+  }
+}
+
+function generateCandidates(seed: number, count: number, includeAgainstAll: string): Candidate[] {
+  const rng = seededRandom(seed)
+  const used = new Set<number>()
+  const candidates: Candidate[] = []
+
+  for (let i = 0; i < count; i++) {
+    let nameIdx: number
+    do { nameIdx = Math.floor(rng() * LAST_NAMES.length) } while (used.has(nameIdx))
+    used.add(nameIdx)
+    candidates.push({
+      name: `${LAST_NAMES[nameIdx]} ${INITIALS[nameIdx % INITIALS.length]}`,
+      percent: 0,
+    })
+  }
+
+  // Generate percentages
+  let remaining = 100
+  const againstAllPct = 3 + Math.floor(rng() * 12)
+  remaining -= againstAllPct
+
+  for (let i = 0; i < candidates.length; i++) {
+    if (i === candidates.length - 1) {
+      candidates[i].percent = remaining
+    } else {
+      const share = Math.floor(remaining * (0.3 + rng() * 0.4))
+      candidates[i].percent = share
+      remaining -= share
+    }
+  }
+
+  // Sort by percent descending, mark winner
+  candidates.sort((a, b) => b.percent - a.percent)
+  candidates[0].isWinner = true
+
+  candidates.push({ name: includeAgainstAll, percent: againstAllPct })
+
+  return candidates
+}
+
+const FACULTIES = ['ИСиТ', 'РТС', 'СЦТ', 'ФП', 'ИКСС', 'ЦЭУБИ', 'КТ', 'ВУЦ']
+
 // ─── Data (i18n-aware) ───────────────────────────────────────────────────────
 
 function getArchiveItems(t: (key: string) => string): ArchiveItem[] {
   const againstAll = t('archive.againstAll')
-  return [
-    {
-      id: '1',
-      decor: t('election.decor'),
-      title: t('archive.chairmanTitle'),
-      date: t('archive.date_dec18'),
+  const decor = t('election.decor')
+  const chairmanTitle = t('archive.chairmanTitle')
+  const chairsTitle = t('archive.chairsTitle')
+
+  const items: ArchiveItem[] = []
+  let id = 1
+
+  // 6 years: 2025 down to 2020, each with chairman (December) + councils (September)
+  const years = [2025, 2024, 2023, 2022, 2021, 2020]
+  const decDates = ['18 декабря', '12 декабря', '15 декабря', '10 декабря', '17 декабря', '14 декабря']
+  const sepDates = ['5 сентября', '8 сентября', '3 сентября', '6 сентября', '9 сентября', '4 сентября']
+
+  for (let yi = 0; yi < years.length; yi++) {
+    const year = years[yi]
+    const seed = year * 100
+
+    // Chairman election (December)
+    const chairCount = 2 + Math.floor(seededRandom(seed + 1)() * 4) // 2-5 candidates
+    items.push({
+      id: String(id++),
+      decor,
+      title: chairmanTitle,
+      date: decDates[yi],
       time: '10:00 – 18:00',
-      year: '2025',
+      year: String(year),
       type: 'simple',
-      candidates: [
-        { name: 'Артём Серебренников', percent: 57, isWinner: true },
-        { name: 'Николай Масюткин', percent: 35 },
-        { name: againstAll, percent: 8 },
-      ],
-      totalVoters: 1450,
-      totalEligible: 9291,
-      turnoutPercent: 57,
-    },
-    {
-      id: '2',
-      decor: t('election.decor'),
-      title: t('archive.chairsTitle'),
-      date: t('archive.date_sep5'),
+      candidates: generateCandidates(seed + 10, chairCount, againstAll),
+      totalVoters: 800 + Math.floor(seededRandom(seed + 20)() * 1200),
+      totalEligible: 8000 + Math.floor(seededRandom(seed + 30)() * 3000),
+      turnoutPercent: Math.floor(10 + seededRandom(seed + 40)() * 55),
+    })
+
+    // Councils election (September)
+    const councils: Council[] = FACULTIES.map((faculty, fi) => {
+      const cCount = 2 + Math.floor(seededRandom(seed + 50 + fi)() * 3) // 2-4 candidates
+      return {
+        name: faculty,
+        candidates: generateCandidates(seed + 100 + fi * 10, cCount, againstAll.toLowerCase()),
+      }
+    })
+
+    items.push({
+      id: String(id++),
+      decor,
+      title: chairsTitle,
+      date: sepDates[yi],
       time: '10:00 – 18:00',
-      year: '2025',
+      year: String(year),
       type: 'councils',
-      councils: [
-        {
-          name: 'ИТПП',
-          candidates: [
-            { name: 'Малика Гадар Бадар', percent: 57, isWinner: true },
-            { name: 'Смирнов А. В.', percent: 20 },
-            { name: againstAll.toLowerCase(), percent: 23 },
-          ],
-        },
-        {
-          name: 'ИСиТ',
-          candidates: [
-            { name: 'Малика Гадар Бадар', percent: 57, isWinner: true },
-            { name: 'Смирнов А. В.', percent: 20 },
-            { name: againstAll.toLowerCase(), percent: 23 },
-          ],
-        },
-        {
-          name: 'РТС',
-          candidates: [
-            { name: 'Малика Гадар Бадар', percent: 57, isWinner: true },
-            { name: 'Смирнов А. В.', percent: 20 },
-            { name: againstAll.toLowerCase(), percent: 23 },
-          ],
-        },
-      ],
-      totalVoters: 1450,
-      totalEligible: 9291,
-      turnoutPercent: 2.3,
-    },
-    {
-      id: '3',
-      decor: t('election.decor'),
-      title: t('archive.chairmanTitle'),
-      date: t('archive.date_may15'),
-      time: '10:00 – 18:00',
-      year: '2024',
-      type: 'simple',
-      candidates: [
-        { name: 'Козлова М. А.', percent: 43, isWinner: true },
-        { name: 'Новиков К. Р.', percent: 34 },
-        { name: 'Фёдорова Е. В.', percent: 23 },
-      ],
-      totalVoters: 1134,
-      totalEligible: 1842,
-      turnoutPercent: 62,
-    },
-  ]
+      councils,
+      totalVoters: 1000 + Math.floor(seededRandom(seed + 60)() * 1500),
+      totalEligible: 8000 + Math.floor(seededRandom(seed + 70)() * 3000),
+      turnoutPercent: Math.round((5 + seededRandom(seed + 80)() * 20) * 10) / 10,
+    })
+  }
+
+  return items
 }
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -300,14 +349,14 @@ const FRONT_SPRING = {
   mass: 0.7,
 }
 
-// Depth → visual properties — per Figma: back cards offset right and up
-// Front: x=0, y=0 | Depth 1: x=+21, y=-13 | Depth 2: x=+45, y=-26
+// Depth → visual properties
+// Tighter stacking: cards are closer together
 function depthStyle(depth: number) {
   const d = Math.min(depth, MAX_VISIBLE - 1)
   return {
-    x: d === 1 ? 21 : d === 2 ? 45 : 0,
-    y: d * -13,
-    z: -d * 20,
+    x: d === 1 ? 14 : d === 2 ? 28 : 0,
+    y: d * -8,
+    z: -d * 10,
     scale: 1,
     rotateZ: 0,
     opacity: 1,
@@ -333,7 +382,6 @@ export default function ArchiveSection() {
   // Current front card index
   const frontIndex = order[0]
   const frontItem = items[frontIndex]
-  const currentPosition = order[0] + 1
 
   // Page-turn: card hinges on left edge, rotates forward like turning a page
   const advance = useCallback(() => {
@@ -371,7 +419,7 @@ export default function ArchiveSection() {
     setTimeout(() => { lockRef.current = false }, 700)
   }, [])
 
-  // Jump to a specific year
+  // Jump to a specific year — find the first election of that year
   const jumpToYear = useCallback((year: string) => {
     if (lockRef.current) return
     const idx = items.findIndex(it => it.year === year)
@@ -482,15 +530,12 @@ export default function ArchiveSection() {
                   />
                 )}
 
-                {/* Back cards: НАЖМИТЕ overlay brings to front */}
+                {/* Back cards: clickable to bring to front (no text overlay) */}
                 {!isFront && !isFlying && (
                   <div
-                    className="arc-card__cta-overlay"
+                    className="arc-card__back-click"
                     onClick={e => { e.stopPropagation(); bringToFront(depth) }}
-                  >
-                    <span className="arc-card__cta-hint">{t('archive.open')}</span>
-                    <span className="arc-card__cta-label">{t('archive.press')}</span>
-                  </div>
+                  />
                 )}
               </motion.div>
             )
@@ -498,7 +543,7 @@ export default function ArchiveSection() {
         </div>
       </div>
 
-      {/* Year navigation — useful when there are many elections */}
+      {/* Year navigation only */}
       {years.length > 1 && (
         <div className="archive__nav">
           {years.map(year => (
@@ -512,9 +557,6 @@ export default function ArchiveSection() {
           ))}
         </div>
       )}
-
-      <span className="archive__counter">{currentPosition} / {items.length}</span>
-      <span className="archive__hint">{t('archive.hint')}</span>
     </section>
   )
 }
