@@ -24,9 +24,13 @@ export default function CursorGlow() {
     let curX = mouseX, curY = mouseY
     const cursorEase = 0.65
 
+    const show = () => { if (cursorRef.current) cursorRef.current.style.opacity = '' }
+    const hide = () => { if (cursorRef.current) cursorRef.current.style.opacity = '0' }
+
     const onMove = (e: MouseEvent) => {
       mouseX = e.clientX
       mouseY = e.clientY
+      show()
       const target = e.target as HTMLElement
       setClicking(target.closest(CLICKABLE) !== null)
     }
@@ -34,47 +38,29 @@ export default function CursorGlow() {
     const update = () => {
       curX += (mouseX - curX) * cursorEase
       curY += (mouseY - curY) * cursorEase
-
       if (cursorRef.current) cursorRef.current.style.transform = `translate(${curX}px, ${curY}px)`
-
       raf = requestAnimationFrame(update)
     }
 
-    // Safari doesn't reliably fire mouseleave on document —
-    // use mouseout on documentElement and check relatedTarget
+    // Works in Chrome/Firefox
+    const onLeave = () => hide()
+
+    // Safari: mouseout with null relatedTarget = left the page
     const onOut = (e: MouseEvent) => {
-      if (!e.relatedTarget && !document.hasFocus()) {
-        if (cursorRef.current) cursorRef.current.style.opacity = '0'
-      }
-    }
-    const onLeave = () => {
-      if (cursorRef.current) cursorRef.current.style.opacity = '0'
-    }
-    const onEnter = () => {
-      if (cursorRef.current) cursorRef.current.style.opacity = ''
-    }
-    const onBlur = () => {
-      if (cursorRef.current) cursorRef.current.style.opacity = '0'
-    }
-    const onFocus = () => {
-      if (cursorRef.current) cursorRef.current.style.opacity = ''
+      if (!e.relatedTarget) hide()
     }
 
     window.addEventListener('mousemove', onMove)
     document.addEventListener('mouseleave', onLeave)
-    document.addEventListener('mouseenter', onEnter)
+    document.documentElement.addEventListener('mouseleave', onLeave)
     document.documentElement.addEventListener('mouseout', onOut)
-    window.addEventListener('blur', onBlur)
-    window.addEventListener('focus', onFocus)
     raf = requestAnimationFrame(update)
 
     return () => {
       window.removeEventListener('mousemove', onMove)
       document.removeEventListener('mouseleave', onLeave)
-      document.removeEventListener('mouseenter', onEnter)
+      document.documentElement.removeEventListener('mouseleave', onLeave)
       document.documentElement.removeEventListener('mouseout', onOut)
-      window.removeEventListener('blur', onBlur)
-      window.removeEventListener('focus', onFocus)
       cancelAnimationFrame(raf)
     }
   }, [hasPointer])
