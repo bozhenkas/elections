@@ -5,14 +5,11 @@
   isolation: isolate;
 }
 
-/* Background duplicate card — slight offset so edge peeks from behind */
+/* Duplicate card layer — same position, adds frosted-glass depth */
 .election-card-wrap::before {
   content: '';
   position: absolute;
-  top: -6px;
-  left: 6px;
-  right: -6px;
-  bottom: 6px;
+  inset: 0;
   border-radius: 12px;
   border: 0.5px solid #636363;
   background: rgba(88, 139, 139, 0.17);
