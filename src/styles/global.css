@@ -65,19 +65,12 @@ p, h1, h2, h3, h4, h5, h6 {
   }
 }
 
-/* ===== Glass lava spotlight — organic cursor-tracking glow =====
+/* ===== Glass spotlight — cursor-tracking glow for glass elements =====
    Usage: add class "glass-spotlight" + use useLavaSpotlight() hook
-   The element must have position: relative and overflow: hidden
-   8 blobs: 2 follow, 4 flee from cursor, 2 orbit */
+   The element must have position: relative and overflow: hidden */
 .glass-spotlight {
-  --b0x: 50%; --b0y: 50%;
-  --b1x: 50%; --b1y: 50%;
-  --b2x: 15%; --b2y: 15%;
-  --b3x: 85%; --b3y: 15%;
-  --b4x: 15%; --b4y: 85%;
-  --b5x: 85%; --b5y: 85%;
-  --b6x: 50%; --b6y: 50%;
-  --b7x: 50%; --b7y: 50%;
+  --gx: 50%;
+  --gy: 50%;
   --glow: 0;
 }
 
@@ -86,28 +79,14 @@ p, h1, h2, h3, h4, h5, h6 {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background:
-    /* followers — bright, close to cursor */
-    radial-gradient(160px circle at var(--b0x) var(--b0y),
-      rgba(205, 220, 220, 0.10) 0%, transparent 70%),
-    radial-gradient(220px circle at var(--b1x) var(--b1y),
-      rgba(180, 210, 210, 0.07) 0%, transparent 65%),
-    /* fleeing corner blobs — soft ambient glow */
-    radial-gradient(260px circle at var(--b2x) var(--b2y),
-      rgba(170, 200, 200, 0.06) 0%, transparent 70%),
-    radial-gradient(240px circle at var(--b3x) var(--b3y),
-      rgba(160, 195, 195, 0.06) 0%, transparent 70%),
-    radial-gradient(260px circle at var(--b4x) var(--b4y),
-      rgba(170, 200, 200, 0.05) 0%, transparent 70%),
-    radial-gradient(240px circle at var(--b5x) var(--b5y),
-      rgba(160, 195, 195, 0.05) 0%, transparent 70%),
-    /* orbiting blobs — medium, create swirl */
-    radial-gradient(200px circle at var(--b6x) var(--b6y),
-      rgba(195, 215, 215, 0.07) 0%, transparent 65%),
-    radial-gradient(180px circle at var(--b7x) var(--b7y),
-      rgba(195, 215, 215, 0.06) 0%, transparent 60%);
+  background: radial-gradient(
+    380px circle at var(--gx) var(--gy),
+    rgba(205, 220, 220, 0.07) 0%,
+    rgba(205, 220, 220, 0.03) 40%,
+    transparent 70%
+  );
   opacity: var(--glow);
-  transition: opacity 0.6s ease;
+  transition: opacity 0.55s ease;
   pointer-events: none;
   z-index: 0;
 }
