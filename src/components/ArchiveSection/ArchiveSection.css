@@ -82,8 +82,23 @@
   backdrop-filter: blur(81.15px);
   -webkit-backdrop-filter: blur(81.15px);
   overflow: hidden;
+  overflow-y: auto;
   will-change: transform, opacity;
   transform-style: preserve-3d;
+}
+
+/* scrollbar for card */
+.arc-card::-webkit-scrollbar {
+  width: 4px;
+}
+
+.arc-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.arc-card::-webkit-scrollbar-thumb {
+  background: rgba(205, 220, 220, 0.2);
+  border-radius: 4px;
 }
 
 .arc-card--front {
@@ -116,7 +131,7 @@
 .arc-card__inner {
   display: flex;
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   padding: 32px 40px;
   flex-direction: column;
   align-items: flex-start;
