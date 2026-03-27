@@ -41,8 +41,8 @@
   border: 0.5px solid var(--border-subtle);
   border-radius: 12px;
   padding: 4px;
-  backdrop-filter: blur(0.15px);
-  -webkit-backdrop-filter: blur(0.15px);
+  backdrop-filter: blur(80px);
+  -webkit-backdrop-filter: blur(80px);
 }
 
 /* Language toggle — separate clickable area */

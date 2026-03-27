@@ -48,7 +48,7 @@
 .election-card__content {
   display: flex;
   flex-direction: column;
-  gap: 90px;
+  gap: 120px;
   flex: 1;
   min-width: 0;
 }

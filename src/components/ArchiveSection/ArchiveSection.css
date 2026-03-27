@@ -17,7 +17,7 @@
   color: var(--accent);
   letter-spacing: -0.02em;
   line-height: 1;
-  margin: 0 0 10px;
+  margin: 0 0 15px;
 }
 
 /* Stack container */
@@ -38,7 +38,7 @@
 /* Year navigation */
 .archive__nav {
   display: flex;
-  gap: 8px;
+  gap: 5px;
   margin-top: 10px;
   flex-wrap: wrap;
   justify-content: center;
@@ -132,7 +132,7 @@
   display: flex;
   width: 100%;
   min-height: 100%;
-  padding: 32px 40px;
+  padding: 30px 40px;
   flex-direction: column;
   align-items: flex-start;
   justify-content: space-between;
@@ -166,12 +166,12 @@
 
 .arc-card__title {
   font-family: var(--font-display);
-  font-size: 40px;
+  font-size: 60px;
   font-weight: 400;
   text-transform: uppercase;
   color: var(--accent);
-  letter-spacing: -0.03em;
-  line-height: 0.92;
+  letter-spacing: -1px;
+  line-height: 1;
   margin: 0;
   white-space: pre-line;
 }
@@ -189,7 +189,7 @@
 .arc-pct {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 10px;
   min-width: 0;
 }
 
@@ -207,29 +207,26 @@
 
 .arc-pct__value {
   font-family: var(--font-display);
-  font-size: 60px;
+  font-size: 80px;
   font-weight: 400;
-  letter-spacing: -0.03em;
+  letter-spacing: -1px;
   line-height: 1;
 }
 
 .arc-pct__sign {
   font-family: var(--font-decor);
   font-style: italic;
-  font-size: 30px;
+  font-size: 52px;
   line-height: 1;
-  align-self: flex-start;
-  margin-top: 5px;
+  color: #eee;
+  letter-spacing: -1.04px;
 }
 
 .arc-pct__name {
   font-family: var(--font-body);
-  font-size: 13px;
-  color: rgba(249, 249, 249, 0.55);
+  font-size: 25px;
+  color: #f9f9f9;
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 180px;
 }
 
 /* Compact (councils) */
@@ -240,9 +237,9 @@
 /* ===== Simple results row ===== */
 .arc-card__results {
   display: flex;
-  gap: 48px;
-  align-items: flex-end;
-  flex-wrap: nowrap;
+  gap: 40px 80px;
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 /* ===== Councils expand wrapper ===== */

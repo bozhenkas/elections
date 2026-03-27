@@ -101,6 +101,7 @@
   color: #f9f9f9;
   text-transform: lowercase;
   line-height: normal;
+  letter-spacing: -0.75px;
 }
 
 .faq__point {
